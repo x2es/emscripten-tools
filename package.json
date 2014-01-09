@@ -1,0 +1,40 @@
+{
+  "private": true,
+  "name": "emscripten-tools",
+  "description": "helper tools for wrap low level operations",
+  "version": "0.0.1",
+  "author": "Konstantin Ivanov [x@ES] <KEIvanov@gmail.com>",
+  "license": "MIT",
+
+  "keywords": [
+    "emscripten",
+    "asmjs",
+    "asm.js",
+    "C",
+    "C++",
+    "CPP",
+    "LLVM"
+  ],
+
+  "dependencies": {
+    "requirejs": "latest"
+  },
+  "devDependencies": {
+    "karma": "latest",
+    "karma-mocha": "latest",
+    "chai": "latest",
+    "sinon": "latest",
+    "karma-html-reporter": "latest",
+    "karma-mp3-reporter": "https://github.com/x2es/karma-mp3-reporter/tarball/master"
+  },
+
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": {
+    "url": ""
+  }
+
+}
