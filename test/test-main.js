@@ -32,12 +32,18 @@
       paths: {
         'chai':           'node_modules/chai/chai',
         'c-array-ref':    'js/lib/c-array-ref',
-        'c-array-param':  'test/array_param'
+        'c-array-param':  'test/array_param',
+
+        'c-params-ptrs':  'test/params_ptrs'
       },
 
       shim: {
         'c-array-param': {
-          exports: 'Module'
+          exports: 'CArrayParam'
+        },
+
+        'c-params-ptrs': {
+          exports: 'CParamsPtrs'
         }
       },
 

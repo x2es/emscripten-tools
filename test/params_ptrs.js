@@ -1,28 +1,29 @@
-CArrayParam = {
+// Note: Some Emscripten settings will significantly limit the speed of the generated code.
+// Note: Some Emscripten settings may limit the speed of the generated code.
+// The Module object: Our interface to the outside world. We import
+// and export values on it, and do the work to get that through
+// closure compiler if necessary. There are various ways Module can be used:
+// 1. Not defined. We create it here
+// 2. A function parameter, function(Module) { ..generated code.. }
+// 3. pre-run appended it, var Module = {}; ..generated code..
+// 4. External script tag defines var Module.
+// We need to do an eval in order to handle the closure compiler
+// case, where this code here is minified but Module was defined
+// elsewhere (e.g. case 4 above). We also need to check if Module
+// already exists (e.g. case 3 above).
+// Note that if you want to run closure, and also to use Module
+// after the generated code, you will need to define   var Module = {};
+// before the code. Then that object will be used in the code, and you
+// can continue to use Module afterwards as well.
+ 
+var CParamsPtrs = {
   noInitialRun: true,
   print: function() {
-    console.log('CArrayParam.print', arguments);
+    console.log('CParamsPtrs.print', arguments);
   }
 };
 
 (function(Module) {
-  // Note: Some Emscripten settings will significantly limit the speed of the generated code.
-  // Note: Some Emscripten settings may limit the speed of the generated code.
-  // The Module object: Our interface to the outside world. We import
-  // and export values on it, and do the work to get that through
-  // closure compiler if necessary. There are various ways Module can be used:
-  // 1. Not defined. We create it here
-  // 2. A function parameter, function(Module) { ..generated code.. }
-  // 3. pre-run appended it, var Module = {}; ..generated code..
-  // 4. External script tag defines var Module.
-  // We need to do an eval in order to handle the closure compiler
-  // case, where this code here is minified but Module was defined
-  // elsewhere (e.g. case 4 above). We also need to check if Module
-  // already exists (e.g. case 3 above).
-  // Note that if you want to run closure, and also to use Module
-  // after the generated code, you will need to define   var Module = {};
-  // before the code. Then that object will be used in the code, and you
-  // can continue to use Module afterwards as well.
   var Module;
   if (!Module) Module = eval('(function() { try { return Module || {} } catch(e) { return {} } })()');
   // Sometimes an existing Module object exists with properties
@@ -1232,9 +1233,9 @@ CArrayParam = {
   var memoryInitializer = null;
   // === Body ===
   STATIC_BASE = 8;
-  STATICTOP = STATIC_BASE + 0;
+  STATICTOP = STATIC_BASE + 232;
   /* global initializers */ __ATINIT__.push({ func: function() { runPostSets() } });
-  /* no memory initializer */
+  /* memory initializer */ allocate([115,117,109,80,116,114,32,105,115,58,32,37,105,10,0,0,115,117,109,32,105,115,58,32,37,105,10,0,0,0,0,0,115,105,122,101,111,102,32,117,110,115,105,103,110,101,100,32,108,111,110,103,32,108,111,110,103,58,32,37,105,10,0,0,115,105,122,101,111,102,32,117,110,115,105,103,110,101,100,32,105,110,116,58,32,37,105,10,0,0,0,0,0,0,0,0,115,117,109,80,116,114,32,42,97,61,37,105,44,32,42,98,61,37,108,108,105,44,32,42,99,61,37,105,10,0,0,0,115,117,109,80,116,114,32,97,91,48,93,61,37,105,44,32,98,91,48,93,61,37,108,108,105,44,32,99,91,48,93,61,37,105,10,0,0,0,0,0,115,117,109,80,116,114,32,97,61,37,105,44,32,98,61,37,108,108,105,44,32,99,61,37,105,10,0,0,0,0,0,0,115,117,109,51,32,97,61,37,105,44,32,98,61,37,108,108,105,44,32,99,61,37,105,10,0,0,0,0,0,0,0,0], "i8", ALLOC_NONE, Runtime.GLOBAL_BASE)
   function runPostSets() {
   }
   var tempDoublePtr = Runtime.alignMemory(allocate(12, "i8", ALLOC_STATIC), 8);
@@ -1255,83 +1256,6 @@ CArrayParam = {
     HEAP8[tempDoublePtr+6] = HEAP8[ptr+6];
     HEAP8[tempDoublePtr+7] = HEAP8[ptr+7];
   }
-    function _memcpy(dest, src, num) {
-        dest = dest|0; src = src|0; num = num|0;
-        var ret = 0;
-        ret = dest|0;
-        if ((dest&3) == (src&3)) {
-          while (dest & 3) {
-            if ((num|0) == 0) return ret|0;
-            HEAP8[(dest)]=HEAP8[(src)];
-            dest = (dest+1)|0;
-            src = (src+1)|0;
-            num = (num-1)|0;
-          }
-          while ((num|0) >= 4) {
-            HEAP32[((dest)>>2)]=HEAP32[((src)>>2)];
-            dest = (dest+4)|0;
-            src = (src+4)|0;
-            num = (num-4)|0;
-          }
-        }
-        while ((num|0) > 0) {
-          HEAP8[(dest)]=HEAP8[(src)];
-          dest = (dest+1)|0;
-          src = (src+1)|0;
-          num = (num-1)|0;
-        }
-        return ret|0;
-      }
-    function _memset(ptr, value, num) {
-        ptr = ptr|0; value = value|0; num = num|0;
-        var stop = 0, value4 = 0, stop4 = 0, unaligned = 0;
-        stop = (ptr + num)|0;
-        if ((num|0) >= 20) {
-          // This is unaligned, but quite large, so work hard to get to aligned settings
-          value = value & 0xff;
-          unaligned = ptr & 3;
-          value4 = value | (value << 8) | (value << 16) | (value << 24);
-          stop4 = stop & ~3;
-          if (unaligned) {
-            unaligned = (ptr + 4 - unaligned)|0;
-            while ((ptr|0) < (unaligned|0)) { // no need to check for stop, since we have large num
-              HEAP8[(ptr)]=value;
-              ptr = (ptr+1)|0;
-            }
-          }
-          while ((ptr|0) < (stop4|0)) {
-            HEAP32[((ptr)>>2)]=value4;
-            ptr = (ptr+4)|0;
-          }
-        }
-        while ((ptr|0) < (stop|0)) {
-          HEAP8[(ptr)]=value;
-          ptr = (ptr+1)|0;
-        }
-        return (ptr-num)|0;
-      }
-    function _malloc(bytes) {
-        /* Over-allocate to make sure it is byte-aligned by 8.
-         * This will leak memory, but this is only the dummy
-         * implementation (replaced by dlmalloc normally) so
-         * not an issue.
-         */
-        var ptr = Runtime.dynamicAlloc(bytes + 8);
-        return (ptr+8) & 0xFFFFFFF8;
-      }
-    Module["_malloc"] = _malloc;
-    function _free() {
-    }
-    Module["_free"] = _free;
-    function _strlen(ptr) {
-        ptr = ptr|0;
-        var curr = 0;
-        curr = ptr;
-        while (HEAP8[(curr)]) {
-          curr = (curr + 1)|0;
-        }
-        return (curr - ptr)|0;
-      }
     var ERRNO_CODES={EPERM:1,ENOENT:2,ESRCH:3,EINTR:4,EIO:5,ENXIO:6,E2BIG:7,ENOEXEC:8,EBADF:9,ECHILD:10,EAGAIN:11,EWOULDBLOCK:11,ENOMEM:12,EACCES:13,EFAULT:14,ENOTBLK:15,EBUSY:16,EEXIST:17,EXDEV:18,ENODEV:19,ENOTDIR:20,EISDIR:21,EINVAL:22,ENFILE:23,EMFILE:24,ENOTTY:25,ETXTBSY:26,EFBIG:27,ENOSPC:28,ESPIPE:29,EROFS:30,EMLINK:31,EPIPE:32,EDOM:33,ERANGE:34,ENOMSG:42,EIDRM:43,ECHRNG:44,EL2NSYNC:45,EL3HLT:46,EL3RST:47,ELNRNG:48,EUNATCH:49,ENOCSI:50,EL2HLT:51,EDEADLK:35,ENOLCK:37,EBADE:52,EBADR:53,EXFULL:54,ENOANO:55,EBADRQC:56,EBADSLT:57,EDEADLOCK:35,EBFONT:59,ENOSTR:60,ENODATA:61,ETIME:62,ENOSR:63,ENONET:64,ENOPKG:65,EREMOTE:66,ENOLINK:67,EADV:68,ESRMNT:69,ECOMM:70,EPROTO:71,EMULTIHOP:72,EDOTDOT:73,EBADMSG:74,ENOTUNIQ:76,EBADFD:77,EREMCHG:78,ELIBACC:79,ELIBBAD:80,ELIBSCN:81,ELIBMAX:82,ELIBEXEC:83,ENOSYS:38,ENOTEMPTY:39,ENAMETOOLONG:36,ELOOP:40,EOPNOTSUPP:95,EPFNOSUPPORT:96,ECONNRESET:104,ENOBUFS:105,EAFNOSUPPORT:97,EPROTOTYPE:91,ENOTSOCK:88,ENOPROTOOPT:92,ESHUTDOWN:108,ECONNREFUSED:111,EADDRINUSE:98,ECONNABORTED:103,ENETUNREACH:101,ENETDOWN:100,ETIMEDOUT:110,EHOSTDOWN:112,EHOSTUNREACH:113,EINPROGRESS:115,EALREADY:114,EDESTADDRREQ:89,EMSGSIZE:90,EPROTONOSUPPORT:93,ESOCKTNOSUPPORT:94,EADDRNOTAVAIL:99,ENETRESET:102,EISCONN:106,ENOTCONN:107,ETOOMANYREFS:109,EUSERS:87,EDQUOT:122,ESTALE:116,ENOTSUP:95,ENOMEDIUM:123,EILSEQ:84,EOVERFLOW:75,ECANCELED:125,ENOTRECOVERABLE:131,EOWNERDEAD:130,ESTRPIPE:86};
     var ERRNO_MESSAGES={0:"Success",1:"Not super-user",2:"No such file or directory",3:"No such process",4:"Interrupted system call",5:"I/O error",6:"No such device or address",7:"Arg list too long",8:"Exec format error",9:"Bad file number",10:"No children",11:"No more processes",12:"Not enough core",13:"Permission denied",14:"Bad address",15:"Block device required",16:"Mount device busy",17:"File exists",18:"Cross-device link",19:"No such device",20:"Not a directory",21:"Is a directory",22:"Invalid argument",23:"Too many open files in system",24:"Too many open files",25:"Not a typewriter",26:"Text file busy",27:"File too large",28:"No space left on device",29:"Illegal seek",30:"Read only file system",31:"Too many links",32:"Broken pipe",33:"Math arg out of domain of func",34:"Math result not representable",35:"File locking deadlock error",36:"File or path name too long",37:"No record locks available",38:"Function not implemented",39:"Directory not empty",40:"Too many symbolic links",42:"No message of desired type",43:"Identifier removed",44:"Channel number out of range",45:"Level 2 not synchronized",46:"Level 3 halted",47:"Level 3 reset",48:"Link number out of range",49:"Protocol driver not attached",50:"No CSI structure available",51:"Level 2 halted",52:"Invalid exchange",53:"Invalid request descriptor",54:"Exchange full",55:"No anode",56:"Invalid request code",57:"Invalid slot",59:"Bad font file fmt",60:"Device not a stream",61:"No data (for no delay io)",62:"Timer expired",63:"Out of streams resources",64:"Machine is not on the network",65:"Package not installed",66:"The object is remote",67:"The link has been severed",68:"Advertise error",69:"Srmount error",70:"Communication error on send",71:"Protocol error",72:"Multihop attempted",73:"Cross mount point (not really error)",74:"Trying to read unreadable message",75:"Value too large for defined data type",76:"Given log. name not unique",77:"f.d. invalid for this operation",78:"Remote address changed",79:"Can   access a needed shared lib",80:"Accessing a corrupted shared lib",81:".lib section in a.out corrupted",82:"Attempting to link in too many libs",83:"Attempting to exec a shared library",84:"Illegal byte sequence",86:"Streams pipe error",87:"Too many users",88:"Socket operation on non-socket",89:"Destination address required",90:"Message too long",91:"Protocol wrong type for socket",92:"Protocol not available",93:"Unknown protocol",94:"Socket type not supported",95:"Not supported",96:"Protocol family not supported",97:"Address family not supported by protocol family",98:"Address already in use",99:"Address not available",100:"Network interface is not configured",101:"Network is unreachable",102:"Connection reset by network",103:"Connection aborted",104:"Connection reset by peer",105:"No buffer space available",106:"Socket is already connected",107:"Socket is not connected",108:"Can't send after socket shutdown",109:"Too many references",110:"Connection timed out",111:"Connection refused",112:"Host is down",113:"Host is unreachable",114:"Socket already connected",115:"Connection already in progress",116:"Stale file handle",122:"Quota exceeded",123:"No medium (in tape drive)",125:"Operation canceled",130:"Previous owner died",131:"State not recoverable"};
     var ___errno_state=0;function ___setErrNo(value) {
@@ -1339,6 +1263,123 @@ CArrayParam = {
         HEAP32[((___errno_state)>>2)]=value
         return value;
       }
+    var PATH={splitPath:function (filename) {
+          var splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
+          return splitPathRe.exec(filename).slice(1);
+        },normalizeArray:function (parts, allowAboveRoot) {
+          // if the path tries to go above the root, `up` ends up > 0
+          var up = 0;
+          for (var i = parts.length - 1; i >= 0; i--) {
+            var last = parts[i];
+            if (last === '.') {
+              parts.splice(i, 1);
+            } else if (last === '..') {
+              parts.splice(i, 1);
+              up++;
+            } else if (up) {
+              parts.splice(i, 1);
+              up--;
+            }
+          }
+          // if the path is allowed to go above the root, restore leading ..s
+          if (allowAboveRoot) {
+            for (; up--; up) {
+              parts.unshift('..');
+            }
+          }
+          return parts;
+        },normalize:function (path) {
+          var isAbsolute = path.charAt(0) === '/',
+              trailingSlash = path.substr(-1) === '/';
+          // Normalize the path
+          path = PATH.normalizeArray(path.split('/').filter(function(p) {
+            return !!p;
+          }), !isAbsolute).join('/');
+          if (!path && !isAbsolute) {
+            path = '.';
+          }
+          if (path && trailingSlash) {
+            path += '/';
+          }
+          return (isAbsolute ? '/' : '') + path;
+        },dirname:function (path) {
+          var result = PATH.splitPath(path),
+              root = result[0],
+              dir = result[1];
+          if (!root && !dir) {
+            // No dirname whatsoever
+            return '.';
+          }
+          if (dir) {
+            // It has a dirname, strip trailing slash
+            dir = dir.substr(0, dir.length - 1);
+          }
+          return root + dir;
+        },basename:function (path) {
+          // EMSCRIPTEN return '/'' for '/', not an empty string
+          if (path === '/') return '/';
+          var lastSlash = path.lastIndexOf('/');
+          if (lastSlash === -1) return path;
+          return path.substr(lastSlash+1);
+        },extname:function (path) {
+          return PATH.splitPath(path)[3];
+        },join:function () {
+          var paths = Array.prototype.slice.call(arguments, 0);
+          return PATH.normalize(paths.join('/'));
+        },join2:function (l, r) {
+          return PATH.normalize(l + '/' + r);
+        },resolve:function () {
+          var resolvedPath = '',
+            resolvedAbsolute = false;
+          for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
+            var path = (i >= 0) ? arguments[i] : FS.cwd();
+            // Skip empty and invalid entries
+            if (typeof path !== 'string') {
+              throw new TypeError('Arguments to path.resolve must be strings');
+            } else if (!path) {
+              continue;
+            }
+            resolvedPath = path + '/' + resolvedPath;
+            resolvedAbsolute = path.charAt(0) === '/';
+          }
+          // At this point the path should be resolved to a full absolute path, but
+          // handle relative paths to be safe (might happen when process.cwd() fails)
+          resolvedPath = PATH.normalizeArray(resolvedPath.split('/').filter(function(p) {
+            return !!p;
+          }), !resolvedAbsolute).join('/');
+          return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
+        },relative:function (from, to) {
+          from = PATH.resolve(from).substr(1);
+          to = PATH.resolve(to).substr(1);
+          function trim(arr) {
+            var start = 0;
+            for (; start < arr.length; start++) {
+              if (arr[start] !== '') break;
+            }
+            var end = arr.length - 1;
+            for (; end >= 0; end--) {
+              if (arr[end] !== '') break;
+            }
+            if (start > end) return [];
+            return arr.slice(start, end - start + 1);
+          }
+          var fromParts = trim(from.split('/'));
+          var toParts = trim(to.split('/'));
+          var length = Math.min(fromParts.length, toParts.length);
+          var samePartsLength = length;
+          for (var i = 0; i < length; i++) {
+            if (fromParts[i] !== toParts[i]) {
+              samePartsLength = i;
+              break;
+            }
+          }
+          var outputParts = [];
+          for (var i = samePartsLength; i < fromParts.length; i++) {
+            outputParts.push('..');
+          }
+          outputParts = outputParts.concat(toParts.slice(samePartsLength));
+          return outputParts.join('/');
+        }};
     var TTY={ttys:[],init:function () {
           // https://github.com/kripken/emscripten/pull/1555
           // if (ENVIRONMENT_IS_NODE) {
@@ -3470,123 +3511,981 @@ CArrayParam = {
             transaction.onerror = onerror;
           };
           openRequest.onerror = onerror;
-        }};var PATH={splitPath:function (filename) {
-          var splitPathRe = /^(\/?|)([\s\S]*?)((?:\.{1,2}|[^\/]+?|)(\.[^.\/]*|))(?:[\/]*)$/;
-          return splitPathRe.exec(filename).slice(1);
-        },normalizeArray:function (parts, allowAboveRoot) {
-          // if the path tries to go above the root, `up` ends up > 0
-          var up = 0;
-          for (var i = parts.length - 1; i >= 0; i--) {
-            var last = parts[i];
-            if (last === '.') {
-              parts.splice(i, 1);
-            } else if (last === '..') {
-              parts.splice(i, 1);
-              up++;
-            } else if (up) {
-              parts.splice(i, 1);
-              up--;
+        }};
+    var _mkport=undefined;var SOCKFS={mount:function (mount) {
+          return FS.createNode(null, '/', 16384 | 0777, 0);
+        },createSocket:function (family, type, protocol) {
+          var streaming = type == 1;
+          if (protocol) {
+            assert(streaming == (protocol == 6)); // if SOCK_STREAM, must be tcp
+          }
+          // create our internal socket structure
+          var sock = {
+            family: family,
+            type: type,
+            protocol: protocol,
+            server: null,
+            peers: {},
+            pending: [],
+            recv_queue: [],
+            sock_ops: SOCKFS.websocket_sock_ops
+          };
+          // create the filesystem node to store the socket structure
+          var name = SOCKFS.nextname();
+          var node = FS.createNode(SOCKFS.root, name, 49152, 0);
+          node.sock = sock;
+          // and the wrapping stream that enables library functions such
+          // as read and write to indirectly interact with the socket
+          var stream = FS.createStream({
+            path: name,
+            node: node,
+            flags: FS.modeStringToFlags('r+'),
+            seekable: false,
+            stream_ops: SOCKFS.stream_ops
+          });
+          // map the new stream to the socket structure (sockets have a 1:1
+          // relationship with a stream)
+          sock.stream = stream;
+          return sock;
+        },getSocket:function (fd) {
+          var stream = FS.getStream(fd);
+          if (!stream || !FS.isSocket(stream.node.mode)) {
+            return null;
+          }
+          return stream.node.sock;
+        },stream_ops:{poll:function (stream) {
+            var sock = stream.node.sock;
+            return sock.sock_ops.poll(sock);
+          },ioctl:function (stream, request, varargs) {
+            var sock = stream.node.sock;
+            return sock.sock_ops.ioctl(sock, request, varargs);
+          },read:function (stream, buffer, offset, length, position /* ignored */) {
+            var sock = stream.node.sock;
+            var msg = sock.sock_ops.recvmsg(sock, length);
+            if (!msg) {
+              // socket is closed
+              return 0;
+            }
+            buffer.set(msg.buffer, offset);
+            return msg.buffer.length;
+          },write:function (stream, buffer, offset, length, position /* ignored */) {
+            var sock = stream.node.sock;
+            return sock.sock_ops.sendmsg(sock, buffer, offset, length);
+          },close:function (stream) {
+            var sock = stream.node.sock;
+            sock.sock_ops.close(sock);
+          }},nextname:function () {
+          if (!SOCKFS.nextname.current) {
+            SOCKFS.nextname.current = 0;
+          }
+          return 'socket[' + (SOCKFS.nextname.current++) + ']';
+        },websocket_sock_ops:{createPeer:function (sock, addr, port) {
+            var ws;
+            if (typeof addr === 'object') {
+              ws = addr;
+              addr = null;
+              port = null;
+            }
+            if (ws) {
+              // for sockets that've already connected (e.g. we're the server)
+              // we can inspect the _socket property for the address
+              if (ws._socket) {
+                addr = ws._socket.remoteAddress;
+                port = ws._socket.remotePort;
+              }
+              // if we're just now initializing a connection to the remote,
+              // inspect the url property
+              else {
+                var result = /ws[s]?:\/\/([^:]+):(\d+)/.exec(ws.url);
+                if (!result) {
+                  throw new Error('WebSocket URL must be in the format ws(s)://address:port');
+                }
+                addr = result[1];
+                port = parseInt(result[2], 10);
+              }
+            } else {
+              // create the actual websocket object and connect
+              try {
+                var url = 'ws://' + addr + ':' + port;
+                // the node ws library API is slightly different than the browser's
+                var opts = ENVIRONMENT_IS_NODE ? {headers: {'websocket-protocol': ['binary']}} : ['binary'];
+                // If node we use the ws library.
+                var WebSocket = ENVIRONMENT_IS_NODE ? require('ws') : window['WebSocket'];
+                ws = new WebSocket(url, opts);
+                ws.binaryType = 'arraybuffer';
+              } catch (e) {
+                throw new FS.ErrnoError(ERRNO_CODES.EHOSTUNREACH);
+              }
+            }
+            var peer = {
+              addr: addr,
+              port: port,
+              socket: ws,
+              dgram_send_queue: []
+            };
+            SOCKFS.websocket_sock_ops.addPeer(sock, peer);
+            SOCKFS.websocket_sock_ops.handlePeerEvents(sock, peer);
+            // if this is a bound dgram socket, send the port number first to allow
+            // us to override the ephemeral port reported to us by remotePort on the
+            // remote end.
+            if (sock.type === 2 && typeof sock.sport !== 'undefined') {
+              peer.dgram_send_queue.push(new Uint8Array([
+                  255, 255, 255, 255,
+                  'p'.charCodeAt(0), 'o'.charCodeAt(0), 'r'.charCodeAt(0), 't'.charCodeAt(0),
+                  ((sock.sport & 0xff00) >> 8) , (sock.sport & 0xff)
+              ]));
+            }
+            return peer;
+          },getPeer:function (sock, addr, port) {
+            return sock.peers[addr + ':' + port];
+          },addPeer:function (sock, peer) {
+            sock.peers[peer.addr + ':' + peer.port] = peer;
+          },removePeer:function (sock, peer) {
+            delete sock.peers[peer.addr + ':' + peer.port];
+          },handlePeerEvents:function (sock, peer) {
+            var first = true;
+            var handleOpen = function () {
+              try {
+                var queued = peer.dgram_send_queue.shift();
+                while (queued) {
+                  peer.socket.send(queued);
+                  queued = peer.dgram_send_queue.shift();
+                }
+              } catch (e) {
+                // not much we can do here in the way of proper error handling as we've already
+                // lied and said this data was sent. shut it down.
+                peer.socket.close();
+              }
+            };
+            function handleMessage(data) {
+              assert(typeof data !== 'string' && data.byteLength !== undefined);  // must receive an ArrayBuffer
+              data = new Uint8Array(data);  // make a typed array view on the array buffer
+              // if this is the port message, override the peer's port with it
+              var wasfirst = first;
+              first = false;
+              if (wasfirst &&
+                  data.length === 10 &&
+                  data[0] === 255 && data[1] === 255 && data[2] === 255 && data[3] === 255 &&
+                  data[4] === 'p'.charCodeAt(0) && data[5] === 'o'.charCodeAt(0) && data[6] === 'r'.charCodeAt(0) && data[7] === 't'.charCodeAt(0)) {
+                // update the peer's port and it's key in the peer map
+                var newport = ((data[8] << 8) | data[9]);
+                SOCKFS.websocket_sock_ops.removePeer(sock, peer);
+                peer.port = newport;
+                SOCKFS.websocket_sock_ops.addPeer(sock, peer);
+                return;
+              }
+              sock.recv_queue.push({ addr: peer.addr, port: peer.port, data: data });
+            };
+            if (ENVIRONMENT_IS_NODE) {
+              peer.socket.on('open', handleOpen);
+              peer.socket.on('message', function(data, flags) {
+                if (!flags.binary) {
+                  return;
+                }
+                handleMessage((new Uint8Array(data)).buffer);  // copy from node Buffer -> ArrayBuffer
+              });
+              peer.socket.on('error', function() {
+                // don't throw
+              });
+            } else {
+              peer.socket.onopen = handleOpen;
+              peer.socket.onmessage = function peer_socket_onmessage(event) {
+                handleMessage(event.data);
+              };
+            }
+          },poll:function (sock) {
+            if (sock.type === 1 && sock.server) {
+              // listen sockets should only say they're available for reading
+              // if there are pending clients.
+              return sock.pending.length ? (64 | 1) : 0;
+            }
+            var mask = 0;
+            var dest = sock.type === 1 ?  // we only care about the socket state for connection-based sockets
+              SOCKFS.websocket_sock_ops.getPeer(sock, sock.daddr, sock.dport) :
+              null;
+            if (sock.recv_queue.length ||
+                !dest ||  // connection-less sockets are always ready to read
+                (dest && dest.socket.readyState === dest.socket.CLOSING) ||
+                (dest && dest.socket.readyState === dest.socket.CLOSED)) {  // let recv return 0 once closed
+              mask |= (64 | 1);
+            }
+            if (!dest ||  // connection-less sockets are always ready to write
+                (dest && dest.socket.readyState === dest.socket.OPEN)) {
+              mask |= 4;
+            }
+            if ((dest && dest.socket.readyState === dest.socket.CLOSING) ||
+                (dest && dest.socket.readyState === dest.socket.CLOSED)) {
+              mask |= 16;
+            }
+            return mask;
+          },ioctl:function (sock, request, arg) {
+            switch (request) {
+              case 21531:
+                var bytes = 0;
+                if (sock.recv_queue.length) {
+                  bytes = sock.recv_queue[0].data.length;
+                }
+                HEAP32[((arg)>>2)]=bytes;
+                return 0;
+              default:
+                return ERRNO_CODES.EINVAL;
+            }
+          },close:function (sock) {
+            // if we've spawned a listen server, close it
+            if (sock.server) {
+              try {
+                sock.server.close();
+              } catch (e) {
+              }
+              sock.server = null;
+            }
+            // close any peer connections
+            var peers = Object.keys(sock.peers);
+            for (var i = 0; i < peers.length; i++) {
+              var peer = sock.peers[peers[i]];
+              try {
+                peer.socket.close();
+              } catch (e) {
+              }
+              SOCKFS.websocket_sock_ops.removePeer(sock, peer);
+            }
+            return 0;
+          },bind:function (sock, addr, port) {
+            if (typeof sock.saddr !== 'undefined' || typeof sock.sport !== 'undefined') {
+              throw new FS.ErrnoError(ERRNO_CODES.EINVAL);  // already bound
+            }
+            sock.saddr = addr;
+            sock.sport = port || _mkport();
+            // in order to emulate dgram sockets, we need to launch a listen server when
+            // binding on a connection-less socket
+            // note: this is only required on the server side
+            if (sock.type === 2) {
+              // close the existing server if it exists
+              if (sock.server) {
+                sock.server.close();
+                sock.server = null;
+              }
+              // swallow error operation not supported error that occurs when binding in the
+              // browser where this isn't supported
+              try {
+                sock.sock_ops.listen(sock, 0);
+              } catch (e) {
+                if (!(e instanceof FS.ErrnoError)) throw e;
+                if (e.errno !== ERRNO_CODES.EOPNOTSUPP) throw e;
+              }
+            }
+          },connect:function (sock, addr, port) {
+            if (sock.server) {
+              throw new FS.ErrnoError(ERRNO_CODS.EOPNOTSUPP);
+            }
+            // TODO autobind
+            // if (!sock.addr && sock.type == 2) {
+            // }
+            // early out if we're already connected / in the middle of connecting
+            if (typeof sock.daddr !== 'undefined' && typeof sock.dport !== 'undefined') {
+              var dest = SOCKFS.websocket_sock_ops.getPeer(sock, sock.daddr, sock.dport);
+              if (dest) {
+                if (dest.socket.readyState === dest.socket.CONNECTING) {
+                  throw new FS.ErrnoError(ERRNO_CODES.EALREADY);
+                } else {
+                  throw new FS.ErrnoError(ERRNO_CODES.EISCONN);
+                }
+              }
+            }
+            // add the socket to our peer list and set our
+            // destination address / port to match
+            var peer = SOCKFS.websocket_sock_ops.createPeer(sock, addr, port);
+            sock.daddr = peer.addr;
+            sock.dport = peer.port;
+            // always "fail" in non-blocking mode
+            throw new FS.ErrnoError(ERRNO_CODES.EINPROGRESS);
+          },listen:function (sock, backlog) {
+            if (!ENVIRONMENT_IS_NODE) {
+              throw new FS.ErrnoError(ERRNO_CODES.EOPNOTSUPP);
+            }
+            if (sock.server) {
+               throw new FS.ErrnoError(ERRNO_CODES.EINVAL);  // already listening
+            }
+            var WebSocketServer = require('ws').Server;
+            var host = sock.saddr;
+            sock.server = new WebSocketServer({
+              host: host,
+              port: sock.sport
+              // TODO support backlog
+            });
+            sock.server.on('connection', function(ws) {
+              if (sock.type === 1) {
+                var newsock = SOCKFS.createSocket(sock.family, sock.type, sock.protocol);
+                // create a peer on the new socket
+                var peer = SOCKFS.websocket_sock_ops.createPeer(newsock, ws);
+                newsock.daddr = peer.addr;
+                newsock.dport = peer.port;
+                // push to queue for accept to pick up
+                sock.pending.push(newsock);
+              } else {
+                // create a peer on the listen socket so calling sendto
+                // with the listen socket and an address will resolve
+                // to the correct client
+                SOCKFS.websocket_sock_ops.createPeer(sock, ws);
+              }
+            });
+            sock.server.on('closed', function() {
+              sock.server = null;
+            });
+            sock.server.on('error', function() {
+              // don't throw
+            });
+          },accept:function (listensock) {
+            if (!listensock.server) {
+              throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+            }
+            var newsock = listensock.pending.shift();
+            newsock.stream.flags = listensock.stream.flags;
+            return newsock;
+          },getname:function (sock, peer) {
+            var addr, port;
+            if (peer) {
+              if (sock.daddr === undefined || sock.dport === undefined) {
+                throw new FS.ErrnoError(ERRNO_CODES.ENOTCONN);
+              }
+              addr = sock.daddr;
+              port = sock.dport;
+            } else {
+              // TODO saddr and sport will be set for bind()'d UDP sockets, but what
+              // should we be returning for TCP sockets that've been connect()'d?
+              addr = sock.saddr || 0;
+              port = sock.sport || 0;
+            }
+            return { addr: addr, port: port };
+          },sendmsg:function (sock, buffer, offset, length, addr, port) {
+            if (sock.type === 2) {
+              // connection-less sockets will honor the message address,
+              // and otherwise fall back to the bound destination address
+              if (addr === undefined || port === undefined) {
+                addr = sock.daddr;
+                port = sock.dport;
+              }
+              // if there was no address to fall back to, error out
+              if (addr === undefined || port === undefined) {
+                throw new FS.ErrnoError(ERRNO_CODES.EDESTADDRREQ);
+              }
+            } else {
+              // connection-based sockets will only use the bound
+              addr = sock.daddr;
+              port = sock.dport;
+            }
+            // find the peer for the destination address
+            var dest = SOCKFS.websocket_sock_ops.getPeer(sock, addr, port);
+            // early out if not connected with a connection-based socket
+            if (sock.type === 1) {
+              if (!dest || dest.socket.readyState === dest.socket.CLOSING || dest.socket.readyState === dest.socket.CLOSED) {
+                throw new FS.ErrnoError(ERRNO_CODES.ENOTCONN);
+              } else if (dest.socket.readyState === dest.socket.CONNECTING) {
+                throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
+              }
+            }
+            // create a copy of the incoming data to send, as the WebSocket API
+            // doesn't work entirely with an ArrayBufferView, it'll just send
+            // the entire underlying buffer
+            var data;
+            if (buffer instanceof Array || buffer instanceof ArrayBuffer) {
+              data = buffer.slice(offset, offset + length);
+            } else {  // ArrayBufferView
+              data = buffer.buffer.slice(buffer.byteOffset + offset, buffer.byteOffset + offset + length);
+            }
+            // if we're emulating a connection-less dgram socket and don't have
+            // a cached connection, queue the buffer to send upon connect and
+            // lie, saying the data was sent now.
+            if (sock.type === 2) {
+              if (!dest || dest.socket.readyState !== dest.socket.OPEN) {
+                // if we're not connected, open a new connection
+                if (!dest || dest.socket.readyState === dest.socket.CLOSING || dest.socket.readyState === dest.socket.CLOSED) {
+                  dest = SOCKFS.websocket_sock_ops.createPeer(sock, addr, port);
+                }
+                dest.dgram_send_queue.push(data);
+                return length;
+              }
+            }
+            try {
+              // send the actual data
+              dest.socket.send(data);
+              return length;
+            } catch (e) {
+              throw new FS.ErrnoError(ERRNO_CODES.EINVAL);
+            }
+          },recvmsg:function (sock, length) {
+            // http://pubs.opengroup.org/onlinepubs/7908799/xns/recvmsg.html
+            if (sock.type === 1 && sock.server) {
+              // tcp servers should not be recv()'ing on the listen socket
+              throw new FS.ErrnoError(ERRNO_CODES.ENOTCONN);
+            }
+            var queued = sock.recv_queue.shift();
+            if (!queued) {
+              if (sock.type === 1) {
+                var dest = SOCKFS.websocket_sock_ops.getPeer(sock, sock.daddr, sock.dport);
+                if (!dest) {
+                  // if we have a destination address but are not connected, error out
+                  throw new FS.ErrnoError(ERRNO_CODES.ENOTCONN);
+                }
+                else if (dest.socket.readyState === dest.socket.CLOSING || dest.socket.readyState === dest.socket.CLOSED) {
+                  // return null if the socket has closed
+                  return null;
+                }
+                else {
+                  // else, our socket is in a valid state but truly has nothing available
+                  throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
+                }
+              } else {
+                throw new FS.ErrnoError(ERRNO_CODES.EAGAIN);
+              }
+            }
+            // queued.data will be an ArrayBuffer if it's unadulterated, but if it's
+            // requeued TCP data it'll be an ArrayBufferView
+            var queuedLength = queued.data.byteLength || queued.data.length;
+            var queuedOffset = queued.data.byteOffset || 0;
+            var queuedBuffer = queued.data.buffer || queued.data;
+            var bytesRead = Math.min(length, queuedLength);
+            var res = {
+              buffer: new Uint8Array(queuedBuffer, queuedOffset, bytesRead),
+              addr: queued.addr,
+              port: queued.port
+            };
+            // push back any unread data for TCP connections
+            if (sock.type === 1 && bytesRead < queuedLength) {
+              var bytesRemaining = queuedLength - bytesRead;
+              queued.data = new Uint8Array(queuedBuffer, queuedOffset + bytesRead, bytesRemaining);
+              sock.recv_queue.unshift(queued);
+            }
+            return res;
+          }}};function _send(fd, buf, len, flags) {
+        var sock = SOCKFS.getSocket(fd);
+        if (!sock) {
+          ___setErrNo(ERRNO_CODES.EBADF);
+          return -1;
+        }
+        // TODO honor flags
+        return _write(fd, buf, len);
+      }
+    function _pwrite(fildes, buf, nbyte, offset) {
+        // ssize_t pwrite(int fildes, const void *buf, size_t nbyte, off_t offset);
+        // http://pubs.opengroup.org/onlinepubs/000095399/functions/write.html
+        var stream = FS.getStream(fildes);
+        if (!stream) {
+          ___setErrNo(ERRNO_CODES.EBADF);
+          return -1;
+        }
+        try {
+          var slab = HEAP8;
+          return FS.write(stream, slab, buf, nbyte, offset);
+        } catch (e) {
+          FS.handleFSError(e);
+          return -1;
+        }
+      }function _write(fildes, buf, nbyte) {
+        // ssize_t write(int fildes, const void *buf, size_t nbyte);
+        // http://pubs.opengroup.org/onlinepubs/000095399/functions/write.html
+        var stream = FS.getStream(fildes);
+        if (!stream) {
+          ___setErrNo(ERRNO_CODES.EBADF);
+          return -1;
+        }
+        try {
+          var slab = HEAP8;
+          return FS.write(stream, slab, buf, nbyte);
+        } catch (e) {
+          FS.handleFSError(e);
+          return -1;
+        }
+      }function _fwrite(ptr, size, nitems, stream) {
+        // size_t fwrite(const void *restrict ptr, size_t size, size_t nitems, FILE *restrict stream);
+        // http://pubs.opengroup.org/onlinepubs/000095399/functions/fwrite.html
+        var bytesToWrite = nitems * size;
+        if (bytesToWrite == 0) return 0;
+        var bytesWritten = _write(stream, ptr, bytesToWrite);
+        if (bytesWritten == -1) {
+          var streamObj = FS.getStream(stream);
+          if (streamObj) streamObj.error = true;
+          return 0;
+        } else {
+          return Math.floor(bytesWritten / size);
+        }
+      }
+    function _strlen(ptr) {
+        ptr = ptr|0;
+        var curr = 0;
+        curr = ptr;
+        while (HEAP8[(curr)]) {
+          curr = (curr + 1)|0;
+        }
+        return (curr - ptr)|0;
+      }
+    function __reallyNegative(x) {
+        return x < 0 || (x === 0 && (1/x) === -Infinity);
+      }function __formatString(format, varargs) {
+        var textIndex = format;
+        var argIndex = 0;
+        function getNextArg(type) {
+          // NOTE: Explicitly ignoring type safety. Otherwise this fails:
+          //       int x = 4; printf("%c\n", (char)x);
+          var ret;
+          if (type === 'double') {
+            ret = HEAPF64[(((varargs)+(argIndex))>>3)];
+          } else if (type == 'i64') {
+            ret = [HEAP32[(((varargs)+(argIndex))>>2)],
+                   HEAP32[(((varargs)+(argIndex+8))>>2)]];
+            argIndex += 8; // each 32-bit chunk is in a 64-bit block
+          } else {
+            type = 'i32'; // varargs are always i32, i64, or double
+            ret = HEAP32[(((varargs)+(argIndex))>>2)];
+          }
+          argIndex += Math.max(Runtime.getNativeFieldSize(type), Runtime.getAlignSize(type, null, true));
+          return ret;
+        }
+        var ret = [];
+        var curr, next, currArg;
+        while(1) {
+          var startTextIndex = textIndex;
+          curr = HEAP8[(textIndex)];
+          if (curr === 0) break;
+          next = HEAP8[((textIndex+1)|0)];
+          if (curr == 37) {
+            // Handle flags.
+            var flagAlwaysSigned = false;
+            var flagLeftAlign = false;
+            var flagAlternative = false;
+            var flagZeroPad = false;
+            var flagPadSign = false;
+            flagsLoop: while (1) {
+              switch (next) {
+                case 43:
+                  flagAlwaysSigned = true;
+                  break;
+                case 45:
+                  flagLeftAlign = true;
+                  break;
+                case 35:
+                  flagAlternative = true;
+                  break;
+                case 48:
+                  if (flagZeroPad) {
+                    break flagsLoop;
+                  } else {
+                    flagZeroPad = true;
+                    break;
+                  }
+                case 32:
+                  flagPadSign = true;
+                  break;
+                default:
+                  break flagsLoop;
+              }
+              textIndex++;
+              next = HEAP8[((textIndex+1)|0)];
+            }
+            // Handle width.
+            var width = 0;
+            if (next == 42) {
+              width = getNextArg('i32');
+              textIndex++;
+              next = HEAP8[((textIndex+1)|0)];
+            } else {
+              while (next >= 48 && next <= 57) {
+                width = width * 10 + (next - 48);
+                textIndex++;
+                next = HEAP8[((textIndex+1)|0)];
+              }
+            }
+            // Handle precision.
+            var precisionSet = false;
+            if (next == 46) {
+              var precision = 0;
+              precisionSet = true;
+              textIndex++;
+              next = HEAP8[((textIndex+1)|0)];
+              if (next == 42) {
+                precision = getNextArg('i32');
+                textIndex++;
+              } else {
+                while(1) {
+                  var precisionChr = HEAP8[((textIndex+1)|0)];
+                  if (precisionChr < 48 ||
+                      precisionChr > 57) break;
+                  precision = precision * 10 + (precisionChr - 48);
+                  textIndex++;
+                }
+              }
+              next = HEAP8[((textIndex+1)|0)];
+            } else {
+              var precision = 6; // Standard default.
+            }
+            // Handle integer sizes. WARNING: These assume a 32-bit architecture!
+            var argSize;
+            switch (String.fromCharCode(next)) {
+              case 'h':
+                var nextNext = HEAP8[((textIndex+2)|0)];
+                if (nextNext == 104) {
+                  textIndex++;
+                  argSize = 1; // char (actually i32 in varargs)
+                } else {
+                  argSize = 2; // short (actually i32 in varargs)
+                }
+                break;
+              case 'l':
+                var nextNext = HEAP8[((textIndex+2)|0)];
+                if (nextNext == 108) {
+                  textIndex++;
+                  argSize = 8; // long long
+                } else {
+                  argSize = 4; // long
+                }
+                break;
+              case 'L': // long long
+              case 'q': // int64_t
+              case 'j': // intmax_t
+                argSize = 8;
+                break;
+              case 'z': // size_t
+              case 't': // ptrdiff_t
+              case 'I': // signed ptrdiff_t or unsigned size_t
+                argSize = 4;
+                break;
+              default:
+                argSize = null;
+            }
+            if (argSize) textIndex++;
+            next = HEAP8[((textIndex+1)|0)];
+            // Handle type specifier.
+            switch (String.fromCharCode(next)) {
+              case 'd': case 'i': case 'u': case 'o': case 'x': case 'X': case 'p': {
+                // Integer.
+                var signed = next == 100 || next == 105;
+                argSize = argSize || 4;
+                var currArg = getNextArg('i' + (argSize * 8));
+                var origArg = currArg;
+                var argText;
+                // Flatten i64-1 [low, high] into a (slightly rounded) double
+                if (argSize == 8) {
+                  currArg = Runtime.makeBigInt(currArg[0], currArg[1], next == 117);
+                }
+                // Truncate to requested size.
+                if (argSize <= 4) {
+                  var limit = Math.pow(256, argSize) - 1;
+                  currArg = (signed ? reSign : unSign)(currArg & limit, argSize * 8);
+                }
+                // Format the number.
+                var currAbsArg = Math.abs(currArg);
+                var prefix = '';
+                if (next == 100 || next == 105) {
+                  if (argSize == 8 && i64Math) argText = i64Math.stringify(origArg[0], origArg[1], null); else
+                  argText = reSign(currArg, 8 * argSize, 1).toString(10);
+                } else if (next == 117) {
+                  if (argSize == 8 && i64Math) argText = i64Math.stringify(origArg[0], origArg[1], true); else
+                  argText = unSign(currArg, 8 * argSize, 1).toString(10);
+                  currArg = Math.abs(currArg);
+                } else if (next == 111) {
+                  argText = (flagAlternative ? '0' : '') + currAbsArg.toString(8);
+                } else if (next == 120 || next == 88) {
+                  prefix = (flagAlternative && currArg != 0) ? '0x' : '';
+                  if (argSize == 8 && i64Math) {
+                    if (origArg[1]) {
+                      argText = (origArg[1]>>>0).toString(16);
+                      var lower = (origArg[0]>>>0).toString(16);
+                      while (lower.length < 8) lower = '0' + lower;
+                      argText += lower;
+                    } else {
+                      argText = (origArg[0]>>>0).toString(16);
+                    }
+                  } else
+                  if (currArg < 0) {
+                    // Represent negative numbers in hex as 2's complement.
+                    currArg = -currArg;
+                    argText = (currAbsArg - 1).toString(16);
+                    var buffer = [];
+                    for (var i = 0; i < argText.length; i++) {
+                      buffer.push((0xF - parseInt(argText[i], 16)).toString(16));
+                    }
+                    argText = buffer.join('');
+                    while (argText.length < argSize * 2) argText = 'f' + argText;
+                  } else {
+                    argText = currAbsArg.toString(16);
+                  }
+                  if (next == 88) {
+                    prefix = prefix.toUpperCase();
+                    argText = argText.toUpperCase();
+                  }
+                } else if (next == 112) {
+                  if (currAbsArg === 0) {
+                    argText = '(nil)';
+                  } else {
+                    prefix = '0x';
+                    argText = currAbsArg.toString(16);
+                  }
+                }
+                if (precisionSet) {
+                  while (argText.length < precision) {
+                    argText = '0' + argText;
+                  }
+                }
+                // Add sign if needed
+                if (currArg >= 0) {
+                  if (flagAlwaysSigned) {
+                    prefix = '+' + prefix;
+                  } else if (flagPadSign) {
+                    prefix = ' ' + prefix;
+                  }
+                }
+                // Move sign to prefix so we zero-pad after the sign
+                if (argText.charAt(0) == '-') {
+                  prefix = '-' + prefix;
+                  argText = argText.substr(1);
+                }
+                // Add padding.
+                while (prefix.length + argText.length < width) {
+                  if (flagLeftAlign) {
+                    argText += ' ';
+                  } else {
+                    if (flagZeroPad) {
+                      argText = '0' + argText;
+                    } else {
+                      prefix = ' ' + prefix;
+                    }
+                  }
+                }
+                // Insert the result into the buffer.
+                argText = prefix + argText;
+                argText.split('').forEach(function(chr) {
+                  ret.push(chr.charCodeAt(0));
+                });
+                break;
+              }
+              case 'f': case 'F': case 'e': case 'E': case 'g': case 'G': {
+                // Float.
+                var currArg = getNextArg('double');
+                var argText;
+                if (isNaN(currArg)) {
+                  argText = 'nan';
+                  flagZeroPad = false;
+                } else if (!isFinite(currArg)) {
+                  argText = (currArg < 0 ? '-' : '') + 'inf';
+                  flagZeroPad = false;
+                } else {
+                  var isGeneral = false;
+                  var effectivePrecision = Math.min(precision, 20);
+                  // Convert g/G to f/F or e/E, as per:
+                  // http://pubs.opengroup.org/onlinepubs/9699919799/functions/printf.html
+                  if (next == 103 || next == 71) {
+                    isGeneral = true;
+                    precision = precision || 1;
+                    var exponent = parseInt(currArg.toExponential(effectivePrecision).split('e')[1], 10);
+                    if (precision > exponent && exponent >= -4) {
+                      next = ((next == 103) ? 'f' : 'F').charCodeAt(0);
+                      precision -= exponent + 1;
+                    } else {
+                      next = ((next == 103) ? 'e' : 'E').charCodeAt(0);
+                      precision--;
+                    }
+                    effectivePrecision = Math.min(precision, 20);
+                  }
+                  if (next == 101 || next == 69) {
+                    argText = currArg.toExponential(effectivePrecision);
+                    // Make sure the exponent has at least 2 digits.
+                    if (/[eE][-+]\d$/.test(argText)) {
+                      argText = argText.slice(0, -1) + '0' + argText.slice(-1);
+                    }
+                  } else if (next == 102 || next == 70) {
+                    argText = currArg.toFixed(effectivePrecision);
+                    if (currArg === 0 && __reallyNegative(currArg)) {
+                      argText = '-' + argText;
+                    }
+                  }
+                  var parts = argText.split('e');
+                  if (isGeneral && !flagAlternative) {
+                    // Discard trailing zeros and periods.
+                    while (parts[0].length > 1 && parts[0].indexOf('.') != -1 &&
+                           (parts[0].slice(-1) == '0' || parts[0].slice(-1) == '.')) {
+                      parts[0] = parts[0].slice(0, -1);
+                    }
+                  } else {
+                    // Make sure we have a period in alternative mode.
+                    if (flagAlternative && argText.indexOf('.') == -1) parts[0] += '.';
+                    // Zero pad until required precision.
+                    while (precision > effectivePrecision++) parts[0] += '0';
+                  }
+                  argText = parts[0] + (parts.length > 1 ? 'e' + parts[1] : '');
+                  // Capitalize 'E' if needed.
+                  if (next == 69) argText = argText.toUpperCase();
+                  // Add sign.
+                  if (currArg >= 0) {
+                    if (flagAlwaysSigned) {
+                      argText = '+' + argText;
+                    } else if (flagPadSign) {
+                      argText = ' ' + argText;
+                    }
+                  }
+                }
+                // Add padding.
+                while (argText.length < width) {
+                  if (flagLeftAlign) {
+                    argText += ' ';
+                  } else {
+                    if (flagZeroPad && (argText[0] == '-' || argText[0] == '+')) {
+                      argText = argText[0] + '0' + argText.slice(1);
+                    } else {
+                      argText = (flagZeroPad ? '0' : ' ') + argText;
+                    }
+                  }
+                }
+                // Adjust case.
+                if (next < 97) argText = argText.toUpperCase();
+                // Insert the result into the buffer.
+                argText.split('').forEach(function(chr) {
+                  ret.push(chr.charCodeAt(0));
+                });
+                break;
+              }
+              case 's': {
+                // String.
+                var arg = getNextArg('i8*');
+                var argLength = arg ? _strlen(arg) : '(null)'.length;
+                if (precisionSet) argLength = Math.min(argLength, precision);
+                if (!flagLeftAlign) {
+                  while (argLength < width--) {
+                    ret.push(32);
+                  }
+                }
+                if (arg) {
+                  for (var i = 0; i < argLength; i++) {
+                    ret.push(HEAPU8[((arg++)|0)]);
+                  }
+                } else {
+                  ret = ret.concat(intArrayFromString('(null)'.substr(0, argLength), true));
+                }
+                if (flagLeftAlign) {
+                  while (argLength < width--) {
+                    ret.push(32);
+                  }
+                }
+                break;
+              }
+              case 'c': {
+                // Character.
+                if (flagLeftAlign) ret.push(getNextArg('i8'));
+                while (--width > 0) {
+                  ret.push(32);
+                }
+                if (!flagLeftAlign) ret.push(getNextArg('i8'));
+                break;
+              }
+              case 'n': {
+                // Write the length written so far to the next parameter.
+                var ptr = getNextArg('i32*');
+                HEAP32[((ptr)>>2)]=ret.length
+                break;
+              }
+              case '%': {
+                // Literal percent sign.
+                ret.push(curr);
+                break;
+              }
+              default: {
+                // Unknown specifiers remain untouched.
+                for (var i = startTextIndex; i < textIndex + 2; i++) {
+                  ret.push(HEAP8[(i)]);
+                }
+              }
+            }
+            textIndex += 2;
+            // TODO: Support a/A (hex float) and m (last error) specifiers.
+            // TODO: Support %1${specifier} for arg selection.
+          } else {
+            ret.push(curr);
+            textIndex += 1;
+          }
+        }
+        return ret;
+      }function _fprintf(stream, format, varargs) {
+        // int fprintf(FILE *restrict stream, const char *restrict format, ...);
+        // http://pubs.opengroup.org/onlinepubs/000095399/functions/printf.html
+        var result = __formatString(format, varargs);
+        var stack = Runtime.stackSave();
+        var ret = _fwrite(allocate(result, 'i8', ALLOC_STACK), 1, result.length, stream);
+        Runtime.stackRestore(stack);
+        return ret;
+      }function _printf(format, varargs) {
+        // int printf(const char *restrict format, ...);
+        // http://pubs.opengroup.org/onlinepubs/000095399/functions/printf.html
+        var stdout = HEAP32[((_stdout)>>2)];
+        return _fprintf(stdout, format, varargs);
+      }
+    function _memcpy(dest, src, num) {
+        dest = dest|0; src = src|0; num = num|0;
+        var ret = 0;
+        ret = dest|0;
+        if ((dest&3) == (src&3)) {
+          while (dest & 3) {
+            if ((num|0) == 0) return ret|0;
+            HEAP8[(dest)]=HEAP8[(src)];
+            dest = (dest+1)|0;
+            src = (src+1)|0;
+            num = (num-1)|0;
+          }
+          while ((num|0) >= 4) {
+            HEAP32[((dest)>>2)]=HEAP32[((src)>>2)];
+            dest = (dest+4)|0;
+            src = (src+4)|0;
+            num = (num-4)|0;
+          }
+        }
+        while ((num|0) > 0) {
+          HEAP8[(dest)]=HEAP8[(src)];
+          dest = (dest+1)|0;
+          src = (src+1)|0;
+          num = (num-1)|0;
+        }
+        return ret|0;
+      }
+    function _memset(ptr, value, num) {
+        ptr = ptr|0; value = value|0; num = num|0;
+        var stop = 0, value4 = 0, stop4 = 0, unaligned = 0;
+        stop = (ptr + num)|0;
+        if ((num|0) >= 20) {
+          // This is unaligned, but quite large, so work hard to get to aligned settings
+          value = value & 0xff;
+          unaligned = ptr & 3;
+          value4 = value | (value << 8) | (value << 16) | (value << 24);
+          stop4 = stop & ~3;
+          if (unaligned) {
+            unaligned = (ptr + 4 - unaligned)|0;
+            while ((ptr|0) < (unaligned|0)) { // no need to check for stop, since we have large num
+              HEAP8[(ptr)]=value;
+              ptr = (ptr+1)|0;
             }
           }
-          // if the path is allowed to go above the root, restore leading ..s
-          if (allowAboveRoot) {
-            for (; up--; up) {
-              parts.unshift('..');
-            }
+          while ((ptr|0) < (stop4|0)) {
+            HEAP32[((ptr)>>2)]=value4;
+            ptr = (ptr+4)|0;
           }
-          return parts;
-        },normalize:function (path) {
-          var isAbsolute = path.charAt(0) === '/',
-              trailingSlash = path.substr(-1) === '/';
-          // Normalize the path
-          path = PATH.normalizeArray(path.split('/').filter(function(p) {
-            return !!p;
-          }), !isAbsolute).join('/');
-          if (!path && !isAbsolute) {
-            path = '.';
-          }
-          if (path && trailingSlash) {
-            path += '/';
-          }
-          return (isAbsolute ? '/' : '') + path;
-        },dirname:function (path) {
-          var result = PATH.splitPath(path),
-              root = result[0],
-              dir = result[1];
-          if (!root && !dir) {
-            // No dirname whatsoever
-            return '.';
-          }
-          if (dir) {
-            // It has a dirname, strip trailing slash
-            dir = dir.substr(0, dir.length - 1);
-          }
-          return root + dir;
-        },basename:function (path) {
-          // EMSCRIPTEN return '/'' for '/', not an empty string
-          if (path === '/') return '/';
-          var lastSlash = path.lastIndexOf('/');
-          if (lastSlash === -1) return path;
-          return path.substr(lastSlash+1);
-        },extname:function (path) {
-          return PATH.splitPath(path)[3];
-        },join:function () {
-          var paths = Array.prototype.slice.call(arguments, 0);
-          return PATH.normalize(paths.join('/'));
-        },join2:function (l, r) {
-          return PATH.normalize(l + '/' + r);
-        },resolve:function () {
-          var resolvedPath = '',
-            resolvedAbsolute = false;
-          for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-            var path = (i >= 0) ? arguments[i] : FS.cwd();
-            // Skip empty and invalid entries
-            if (typeof path !== 'string') {
-              throw new TypeError('Arguments to path.resolve must be strings');
-            } else if (!path) {
-              continue;
-            }
-            resolvedPath = path + '/' + resolvedPath;
-            resolvedAbsolute = path.charAt(0) === '/';
-          }
-          // At this point the path should be resolved to a full absolute path, but
-          // handle relative paths to be safe (might happen when process.cwd() fails)
-          resolvedPath = PATH.normalizeArray(resolvedPath.split('/').filter(function(p) {
-            return !!p;
-          }), !resolvedAbsolute).join('/');
-          return ((resolvedAbsolute ? '/' : '') + resolvedPath) || '.';
-        },relative:function (from, to) {
-          from = PATH.resolve(from).substr(1);
-          to = PATH.resolve(to).substr(1);
-          function trim(arr) {
-            var start = 0;
-            for (; start < arr.length; start++) {
-              if (arr[start] !== '') break;
-            }
-            var end = arr.length - 1;
-            for (; end >= 0; end--) {
-              if (arr[end] !== '') break;
-            }
-            if (start > end) return [];
-            return arr.slice(start, end - start + 1);
-          }
-          var fromParts = trim(from.split('/'));
-          var toParts = trim(to.split('/'));
-          var length = Math.min(fromParts.length, toParts.length);
-          var samePartsLength = length;
-          for (var i = 0; i < length; i++) {
-            if (fromParts[i] !== toParts[i]) {
-              samePartsLength = i;
-              break;
-            }
-          }
-          var outputParts = [];
-          for (var i = samePartsLength; i < fromParts.length; i++) {
-            outputParts.push('..');
-          }
-          outputParts = outputParts.concat(toParts.slice(samePartsLength));
-          return outputParts.join('/');
-        }};var Browser={mainLoop:{scheduler:null,shouldPause:false,paused:false,queue:[],pause:function () {
+        }
+        while ((ptr|0) < (stop|0)) {
+          HEAP8[(ptr)]=value;
+          ptr = (ptr+1)|0;
+        }
+        return (ptr-num)|0;
+      }
+    function _malloc(bytes) {
+        /* Over-allocate to make sure it is byte-aligned by 8.
+         * This will leak memory, but this is only the dummy
+         * implementation (replaced by dlmalloc normally) so
+         * not an issue.
+         */
+        var ptr = Runtime.dynamicAlloc(bytes + 8);
+        return (ptr+8) & 0xFFFFFFF8;
+      }
+    Module["_malloc"] = _malloc;
+    function _free() {
+    }
+    Module["_free"] = _free;
+    var Browser={mainLoop:{scheduler:null,shouldPause:false,paused:false,queue:[],pause:function () {
             Browser.mainLoop.shouldPause = true;
           },resume:function () {
             if (Browser.mainLoop.paused) {
@@ -4021,16 +4920,17 @@ CArrayParam = {
           }
           Browser.updateResizeListeners();
         }};
+  FS.staticInit();__ATINIT__.unshift({ func: function() { if (!Module["noFSInit"] && !FS.init.initialized) FS.init() } });__ATMAIN__.push({ func: function() { FS.ignorePermissions = false } });__ATEXIT__.push({ func: function() { FS.quit() } });Module["FS_createFolder"] = FS.createFolder;Module["FS_createPath"] = FS.createPath;Module["FS_createDataFile"] = FS.createDataFile;Module["FS_createPreloadedFile"] = FS.createPreloadedFile;Module["FS_createLazyFile"] = FS.createLazyFile;Module["FS_createLink"] = FS.createLink;Module["FS_createDevice"] = FS.createDevice;
+  ___errno_state = Runtime.staticAlloc(4); HEAP32[((___errno_state)>>2)]=0;
+  __ATINIT__.unshift({ func: function() { TTY.init() } });__ATEXIT__.push({ func: function() { TTY.shutdown() } });TTY.utf8 = new Runtime.UTF8Processor();
+  if (ENVIRONMENT_IS_NODE) { var fs = require("fs"); NODEFS.staticInit(); }
+  __ATINIT__.push({ func: function() { SOCKFS.root = FS.mount(SOCKFS, {}, null); } });
   Module["requestFullScreen"] = function Module_requestFullScreen(lockPointer, resizeCanvas) { Browser.requestFullScreen(lockPointer, resizeCanvas) };
     Module["requestAnimationFrame"] = function Module_requestAnimationFrame(func) { Browser.requestAnimationFrame(func) };
     Module["setCanvasSize"] = function Module_setCanvasSize(width, height, noUpdates) { Browser.setCanvasSize(width, height, noUpdates) };
     Module["pauseMainLoop"] = function Module_pauseMainLoop() { Browser.mainLoop.pause() };
     Module["resumeMainLoop"] = function Module_resumeMainLoop() { Browser.mainLoop.resume() };
     Module["getUserMedia"] = function Module_getUserMedia() { Browser.getUserMedia() }
-  FS.staticInit();__ATINIT__.unshift({ func: function() { if (!Module["noFSInit"] && !FS.init.initialized) FS.init() } });__ATMAIN__.push({ func: function() { FS.ignorePermissions = false } });__ATEXIT__.push({ func: function() { FS.quit() } });Module["FS_createFolder"] = FS.createFolder;Module["FS_createPath"] = FS.createPath;Module["FS_createDataFile"] = FS.createDataFile;Module["FS_createPreloadedFile"] = FS.createPreloadedFile;Module["FS_createLazyFile"] = FS.createLazyFile;Module["FS_createLink"] = FS.createLink;Module["FS_createDevice"] = FS.createDevice;
-  ___errno_state = Runtime.staticAlloc(4); HEAP32[((___errno_state)>>2)]=0;
-  __ATINIT__.unshift({ func: function() { TTY.init() } });__ATEXIT__.push({ func: function() { TTY.shutdown() } });TTY.utf8 = new Runtime.UTF8Processor();
-  if (ENVIRONMENT_IS_NODE) { var fs = require("fs"); NODEFS.staticInit(); }
   STACK_BASE = STACKTOP = Runtime.alignMemory(STATICTOP);
   staticSealed = true; // seal the static portion of memory
   STACK_MAX = STACK_BASE + 5242880;
@@ -4038,55 +4938,1921 @@ CArrayParam = {
   assert(DYNAMIC_BASE < TOTAL_MEMORY, "TOTAL_MEMORY not big enough for stack");
   var FUNCTION_TABLE = [0, 0];
   // EMSCRIPTEN_START_FUNCS
-  function _uintSizeof(){
+  function _sizeofUInt(){
    var label=0;
    return 4;
   }
-  Module["_uintSizeof"] = _uintSizeof;
-  function _uintArrInc($arr,$length,$delta){
+  Module["_sizeofUInt"] = _sizeofUInt;
+  function _sizeofULongLong(){
    var label=0;
+   return 8;
+  }
+  Module["_sizeofULongLong"] = _sizeofULongLong;
+  function _sum3($a,$b$0,$b$1,$c){
+   var label=0;
+   var tempVarArgs=0;
+   var sp=STACKTOP;STACKTOP=(STACKTOP+8)|0; (assert((STACKTOP|0) < (STACK_MAX|0))|0);
+   var $1;
+   var $2=sp;
+   var $3;
+   $1=$a;
+   var $st$0$0=(($2)|0);
+   HEAP32[(($st$0$0)>>2)]=$b$0;
+   var $st$1$1=(($2+4)|0);
+   HEAP32[(($st$1$1)>>2)]=$b$1;
+   $3=$c;
+   var $4=$1;
+   var $ld$2$0=(($2)|0);
+   var $5$0=HEAP32[(($ld$2$0)>>2)];
+   var $ld$3$1=(($2+4)|0);
+   var $5$1=HEAP32[(($ld$3$1)>>2)];
+   var $6=$3;
+   var $$etemp$4=208;
+   var $7=_printf($$etemp$4,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 32)|0,(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=$4,HEAP32[(((tempVarArgs)+(8))>>2)]=$5$0,HEAP32[(((tempVarArgs)+(16))>>2)]=$5$1,HEAP32[(((tempVarArgs)+(24))>>2)]=$6,tempVarArgs)); STACKTOP=tempVarArgs;
+   var $8=$1;
+   var $9$0=$8;
+   var $9$1=0;
+   var $ld$5$0=(($2)|0);
+   var $10$0=HEAP32[(($ld$5$0)>>2)];
+   var $ld$6$1=(($2+4)|0);
+   var $10$1=HEAP32[(($ld$6$1)>>2)];
+   var $11$0=_i64Add($9$0,$9$1,$10$0,$10$1);var $11$1=tempRet0;
+   var $12=$3;
+   var $13$0=$12;
+   var $13$1=0;
+   var $14$0=_i64Add($11$0,$11$1,$13$0,$13$1);var $14$1=tempRet0;
+   var $15$0=$14$0;
+   var $15=$15$0;
+   STACKTOP=sp;return $15;
+  }
+  Module["_sum3"] = _sum3;
+  function _sumPtr($a,$b,$c){
+   var label=0;
+   var tempVarArgs=0;
    var sp=STACKTOP; (assert((STACKTOP|0) < (STACK_MAX|0))|0);
-   label = 1; 
-   while(1)switch(label){
-   case 1: 
    var $1;
    var $2;
    var $3;
-   var $i;
-   $1=$arr;
-   $2=$length;
-   $3=$delta;
-   $i=0;
-   label=2;break;
-   case 2: 
-   var $5=$i;
-   var $6=$2;
-   var $7=($5>>>0)<($6>>>0);
-   if($7){label=3;break;}else{label=5;break;}
-   case 3: 
-   var $9=$3;
-   var $10=$i;
-   var $11=$1;
-   var $12=(($11+($10<<2))|0);
-   var $13=HEAP32[(($12)>>2)];
-   var $14=((($13)+($9))|0);
-   HEAP32[(($12)>>2)]=$14;
-   label=4;break;
-   case 4: 
-   var $16=$i;
-   var $17=((($16)+(1))|0);
-   $i=$17;
-   label=2;break;
-   case 5: 
-   STACKTOP=sp;return;
-    default: assert(0, "bad label: " + label);
-   }
+   $1=$a;
+   $2=$b;
+   $3=$c;
+   var $4=$1;
+   var $5=$2;
+   var $6=$3;
+   var $7=_printf(176,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 24)|0,(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=$4,HEAP32[(((tempVarArgs)+(8))>>2)]=$5,HEAP32[(((tempVarArgs)+(16))>>2)]=$6,tempVarArgs)); STACKTOP=tempVarArgs;
+   var $8=$1;
+   var $9=(($8)|0);
+   var $10=HEAP32[(($9)>>2)];
+   var $11=$2;
+   var $12=(($11)|0);
+   var $ld$0$0=(($12)|0);
+   var $13$0=HEAP32[(($ld$0$0)>>2)];
+   var $ld$1$1=(($12+4)|0);
+   var $13$1=HEAP32[(($ld$1$1)>>2)];
+   var $14=$3;
+   var $15=(($14)|0);
+   var $16=HEAP32[(($15)>>2)];
+   var $$etemp$2=136;
+   var $17=_printf($$etemp$2,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 32)|0,(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=$10,HEAP32[(((tempVarArgs)+(8))>>2)]=$13$0,HEAP32[(((tempVarArgs)+(16))>>2)]=$13$1,HEAP32[(((tempVarArgs)+(24))>>2)]=$16,tempVarArgs)); STACKTOP=tempVarArgs;
+   var $18=$1;
+   var $19=HEAP32[(($18)>>2)];
+   var $20=$2;
+   var $ld$3$0=(($20)|0);
+   var $21$0=HEAP32[(($ld$3$0)>>2)];
+   var $ld$4$1=(($20+4)|0);
+   var $21$1=HEAP32[(($ld$4$1)>>2)];
+   var $22=$3;
+   var $23=HEAP32[(($22)>>2)];
+   var $$etemp$5=104;
+   var $24=_printf($$etemp$5,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 32)|0,(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=$19,HEAP32[(((tempVarArgs)+(8))>>2)]=$21$0,HEAP32[(((tempVarArgs)+(16))>>2)]=$21$1,HEAP32[(((tempVarArgs)+(24))>>2)]=$23,tempVarArgs)); STACKTOP=tempVarArgs;
+   var $25=$1;
+   var $26=HEAP32[(($25)>>2)];
+   var $27=$2;
+   var $ld$6$0=(($27)|0);
+   var $28$0=HEAP32[(($ld$6$0)>>2)];
+   var $ld$7$1=(($27+4)|0);
+   var $28$1=HEAP32[(($ld$7$1)>>2)];
+   var $29=$3;
+   var $30=HEAP32[(($29)>>2)];
+   var $31=_sum3($26,$28$0,$28$1,$30);
+   STACKTOP=sp;return $31;
   }
-  Module["_uintArrInc"] = _uintArrInc;
+  Module["_sumPtr"] = _sumPtr;
+  function _main(){
+   var label=0;
+   var tempVarArgs=0;
+   var sp=STACKTOP;STACKTOP=(STACKTOP+24)|0; (assert((STACKTOP|0) < (STACK_MAX|0))|0);
+   var $1;
+   var $v3=sp;
+   var $v30=(sp)+(8);
+   var $v300=(sp)+(16);
+   $1=0;
+   var $2=_sizeofUInt();
+   var $3=_printf(72,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 8)|0,(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=$2,tempVarArgs)); STACKTOP=tempVarArgs;
+   var $4=_sizeofULongLong();
+   var $5=_printf(40,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 8)|0,(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=$4,tempVarArgs)); STACKTOP=tempVarArgs;
+   var $$etemp$0$0=20;
+   var $$etemp$0$1=0;
+   var $6=_sum3(2,$$etemp$0$0,$$etemp$0$1,200);
+   var $7=_printf(24,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 8)|0,(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=$6,tempVarArgs)); STACKTOP=tempVarArgs;
+   HEAP32[(($v3)>>2)]=3;
+   var $$etemp$1$0=30;
+   var $$etemp$1$1=0;
+   var $st$2$0=(($v30)|0);
+   HEAP32[(($st$2$0)>>2)]=$$etemp$1$0;
+   var $st$3$1=(($v30+4)|0);
+   HEAP32[(($st$3$1)>>2)]=$$etemp$1$1;
+   HEAP32[(($v300)>>2)]=300;
+   var $8=_sumPtr($v3,$v30,$v300);
+   var $9=_printf(8,(tempVarArgs=STACKTOP,STACKTOP = (STACKTOP + 8)|0,(assert((STACKTOP|0) < (STACK_MAX|0))|0),HEAP32[((tempVarArgs)>>2)]=$8,tempVarArgs)); STACKTOP=tempVarArgs;
+   STACKTOP=sp;return 0;
+  }
+  Module["_main"] = _main;
   // EMSCRIPTEN_END_FUNCS
+  function _i64Add(a, b, c, d) {
+      /*
+        x = a + b*2^32
+        y = c + d*2^32
+        result = l + h*2^32
+      */
+      a = a|0; b = b|0; c = c|0; d = d|0;
+      var l = 0, h = 0;
+      l = (a + c)>>>0;
+      h = (b + d + (((l>>>0) < (a>>>0))|0))>>>0; // Add carry from low word to high word on overflow.
+      return tempRet0 = h,l|0;
+    }
+  function _i64Subtract(a, b, c, d) {
+      a = a|0; b = b|0; c = c|0; d = d|0;
+      var l = 0, h = 0;
+      l = (a - c)>>>0;
+      h = (b - d)>>>0;
+      h = (b - d - (((c>>>0) > (a>>>0))|0))>>>0; // Borrow one from high word to low word on underflow.
+      return tempRet0 = h,l|0;
+    }
+  function _bitshift64Shl(low, high, bits) {
+      low = low|0; high = high|0; bits = bits|0;
+      var ander = 0;
+      if ((bits|0) < 32) {
+        ander = ((1 << bits) - 1)|0;
+        tempRet0 = (high << bits) | ((low&(ander << (32 - bits))) >>> (32 - bits));
+        return low << bits;
+      }
+      tempRet0 = low << (bits - 32);
+      return 0;
+    }
+  function _bitshift64Lshr(low, high, bits) {
+      low = low|0; high = high|0; bits = bits|0;
+      var ander = 0;
+      if ((bits|0) < 32) {
+        ander = ((1 << bits) - 1)|0;
+        tempRet0 = high >>> bits;
+        return (low >>> bits) | ((high&ander) << (32 - bits));
+      }
+      tempRet0 = 0;
+      return (high >>> (bits - 32))|0;
+    }
+  function _bitshift64Ashr(low, high, bits) {
+      low = low|0; high = high|0; bits = bits|0;
+      var ander = 0;
+      if ((bits|0) < 32) {
+        ander = ((1 << bits) - 1)|0;
+        tempRet0 = high >> bits;
+        return (low >>> bits) | ((high&ander) << (32 - bits));
+      }
+      tempRet0 = (high|0) < 0 ? -1 : 0;
+      return (high >> (bits - 32))|0;
+    }
+  function _llvm_ctlz_i32(x) {
+      x = x|0;
+      var ret = 0;
+      ret = HEAP8[(((ctlz_i8)+(x >>> 24))|0)];
+      if ((ret|0) < 8) return ret|0;
+      ret = HEAP8[(((ctlz_i8)+((x >> 16)&0xff))|0)];
+      if ((ret|0) < 8) return (ret + 8)|0;
+      ret = HEAP8[(((ctlz_i8)+((x >> 8)&0xff))|0)];
+      if ((ret|0) < 8) return (ret + 16)|0;
+      return (HEAP8[(((ctlz_i8)+(x&0xff))|0)] + 24)|0;
+    }
+  /* PRE_ASM */ var ctlz_i8 = allocate([8,7,6,6,5,5,5,5,4,4,4,4,4,4,4,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0], "i8", ALLOC_DYNAMIC);
+  function _llvm_cttz_i32(x) {
+      x = x|0;
+      var ret = 0;
+      ret = HEAP8[(((cttz_i8)+(x & 0xff))|0)];
+      if ((ret|0) < 8) return ret|0;
+      ret = HEAP8[(((cttz_i8)+((x >> 8)&0xff))|0)];
+      if ((ret|0) < 8) return (ret + 8)|0;
+      ret = HEAP8[(((cttz_i8)+((x >> 16)&0xff))|0)];
+      if ((ret|0) < 8) return (ret + 16)|0;
+      return (HEAP8[(((cttz_i8)+(x >>> 24))|0)] + 24)|0;
+    }
+  /* PRE_ASM */ var cttz_i8 = allocate([8,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,4,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,5,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,4,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,6,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,4,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,5,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,4,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,7,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,4,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,5,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,4,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,6,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,4,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,5,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0,4,0,1,0,2,0,1,0,3,0,1,0,2,0,1,0], "i8", ALLOC_DYNAMIC);
+  // ======== compiled code from system/lib/compiler-rt , see readme therein
+  function ___muldsi3($a, $b) {
+    $a = $a | 0;
+    $b = $b | 0;
+    var $1 = 0, $2 = 0, $3 = 0, $6 = 0, $8 = 0, $11 = 0, $12 = 0;
+    $1 = $a & 65535;
+    $2 = $b & 65535;
+    $3 = Math_imul($2, $1) | 0;
+    $6 = $a >>> 16;
+    $8 = ($3 >>> 16) + (Math_imul($2, $6) | 0) | 0;
+    $11 = $b >>> 16;
+    $12 = Math_imul($11, $1) | 0;
+    return (tempRet0 = (($8 >>> 16) + (Math_imul($11, $6) | 0) | 0) + ((($8 & 65535) + $12 | 0) >>> 16) | 0, 0 | ($8 + $12 << 16 | $3 & 65535)) | 0;
+  }
+  function ___divdi3($a$0, $a$1, $b$0, $b$1) {
+    $a$0 = $a$0 | 0;
+    $a$1 = $a$1 | 0;
+    $b$0 = $b$0 | 0;
+    $b$1 = $b$1 | 0;
+    var $1$0 = 0, $1$1 = 0, $2$0 = 0, $2$1 = 0, $4$0 = 0, $4$1 = 0, $6$0 = 0, $7$0 = 0, $7$1 = 0, $8$0 = 0, $10$0 = 0;
+    $1$0 = $a$1 >> 31 | (($a$1 | 0) < 0 ? -1 : 0) << 1;
+    $1$1 = (($a$1 | 0) < 0 ? -1 : 0) >> 31 | (($a$1 | 0) < 0 ? -1 : 0) << 1;
+    $2$0 = $b$1 >> 31 | (($b$1 | 0) < 0 ? -1 : 0) << 1;
+    $2$1 = (($b$1 | 0) < 0 ? -1 : 0) >> 31 | (($b$1 | 0) < 0 ? -1 : 0) << 1;
+    $4$0 = _i64Subtract($1$0 ^ $a$0, $1$1 ^ $a$1, $1$0, $1$1) | 0;
+    $4$1 = tempRet0;
+    $6$0 = _i64Subtract($2$0 ^ $b$0, $2$1 ^ $b$1, $2$0, $2$1) | 0;
+    $7$0 = $2$0 ^ $1$0;
+    $7$1 = $2$1 ^ $1$1;
+    $8$0 = ___udivmoddi4($4$0, $4$1, $6$0, tempRet0, 0) | 0;
+    $10$0 = _i64Subtract($8$0 ^ $7$0, tempRet0 ^ $7$1, $7$0, $7$1) | 0;
+    return (tempRet0 = tempRet0, $10$0) | 0;
+  }
+  function ___remdi3($a$0, $a$1, $b$0, $b$1) {
+    $a$0 = $a$0 | 0;
+    $a$1 = $a$1 | 0;
+    $b$0 = $b$0 | 0;
+    $b$1 = $b$1 | 0;
+    var $rem = 0, $1$0 = 0, $1$1 = 0, $2$0 = 0, $2$1 = 0, $4$0 = 0, $4$1 = 0, $6$0 = 0, $10$0 = 0, $10$1 = 0, __stackBase__ = 0;
+    __stackBase__ = STACKTOP;
+    STACKTOP = STACKTOP + 8 | 0;
+    $rem = __stackBase__ | 0;
+    $1$0 = $a$1 >> 31 | (($a$1 | 0) < 0 ? -1 : 0) << 1;
+    $1$1 = (($a$1 | 0) < 0 ? -1 : 0) >> 31 | (($a$1 | 0) < 0 ? -1 : 0) << 1;
+    $2$0 = $b$1 >> 31 | (($b$1 | 0) < 0 ? -1 : 0) << 1;
+    $2$1 = (($b$1 | 0) < 0 ? -1 : 0) >> 31 | (($b$1 | 0) < 0 ? -1 : 0) << 1;
+    $4$0 = _i64Subtract($1$0 ^ $a$0, $1$1 ^ $a$1, $1$0, $1$1) | 0;
+    $4$1 = tempRet0;
+    $6$0 = _i64Subtract($2$0 ^ $b$0, $2$1 ^ $b$1, $2$0, $2$1) | 0;
+    ___udivmoddi4($4$0, $4$1, $6$0, tempRet0, $rem) | 0;
+    $10$0 = _i64Subtract(HEAP32[$rem >> 2] ^ $1$0, HEAP32[$rem + 4 >> 2] ^ $1$1, $1$0, $1$1) | 0;
+    $10$1 = tempRet0;
+    STACKTOP = __stackBase__;
+    return (tempRet0 = $10$1, $10$0) | 0;
+  }
+  function ___muldi3($a$0, $a$1, $b$0, $b$1) {
+    $a$0 = $a$0 | 0;
+    $a$1 = $a$1 | 0;
+    $b$0 = $b$0 | 0;
+    $b$1 = $b$1 | 0;
+    var $x_sroa_0_0_extract_trunc = 0, $y_sroa_0_0_extract_trunc = 0, $1$0 = 0, $1$1 = 0, $2 = 0;
+    $x_sroa_0_0_extract_trunc = $a$0;
+    $y_sroa_0_0_extract_trunc = $b$0;
+    $1$0 = ___muldsi3($x_sroa_0_0_extract_trunc, $y_sroa_0_0_extract_trunc) | 0;
+    $1$1 = tempRet0;
+    $2 = Math_imul($a$1, $y_sroa_0_0_extract_trunc) | 0;
+    return (tempRet0 = ((Math_imul($b$1, $x_sroa_0_0_extract_trunc) | 0) + $2 | 0) + $1$1 | $1$1 & 0, 0 | $1$0 & -1) | 0;
+  }
+  function ___udivdi3($a$0, $a$1, $b$0, $b$1) {
+    $a$0 = $a$0 | 0;
+    $a$1 = $a$1 | 0;
+    $b$0 = $b$0 | 0;
+    $b$1 = $b$1 | 0;
+    var $1$0 = 0;
+    $1$0 = ___udivmoddi4($a$0, $a$1, $b$0, $b$1, 0) | 0;
+    return (tempRet0 = tempRet0, $1$0) | 0;
+  }
+  function ___uremdi3($a$0, $a$1, $b$0, $b$1) {
+    $a$0 = $a$0 | 0;
+    $a$1 = $a$1 | 0;
+    $b$0 = $b$0 | 0;
+    $b$1 = $b$1 | 0;
+    var $rem = 0, __stackBase__ = 0;
+    __stackBase__ = STACKTOP;
+    STACKTOP = STACKTOP + 8 | 0;
+    $rem = __stackBase__ | 0;
+    ___udivmoddi4($a$0, $a$1, $b$0, $b$1, $rem) | 0;
+    STACKTOP = __stackBase__;
+    return (tempRet0 = HEAP32[$rem + 4 >> 2] | 0, HEAP32[$rem >> 2] | 0) | 0;
+  }
+  function ___udivmoddi4($a$0, $a$1, $b$0, $b$1, $rem) {
+    $a$0 = $a$0 | 0;
+    $a$1 = $a$1 | 0;
+    $b$0 = $b$0 | 0;
+    $b$1 = $b$1 | 0;
+    $rem = $rem | 0;
+    var $n_sroa_0_0_extract_trunc = 0, $n_sroa_1_4_extract_shift$0 = 0, $n_sroa_1_4_extract_trunc = 0, $d_sroa_0_0_extract_trunc = 0, $d_sroa_1_4_extract_shift$0 = 0, $d_sroa_1_4_extract_trunc = 0, $4 = 0, $17 = 0, $37 = 0, $49 = 0, $51 = 0, $57 = 0, $58 = 0, $66 = 0, $78 = 0, $86 = 0, $88 = 0, $89 = 0, $91 = 0, $92 = 0, $95 = 0, $105 = 0, $117 = 0, $119 = 0, $125 = 0, $126 = 0, $130 = 0, $q_sroa_1_1_ph = 0, $q_sroa_0_1_ph = 0, $r_sroa_1_1_ph = 0, $r_sroa_0_1_ph = 0, $sr_1_ph = 0, $d_sroa_0_0_insert_insert99$0 = 0, $d_sroa_0_0_insert_insert99$1 = 0, $137$0 = 0, $137$1 = 0, $carry_0203 = 0, $sr_1202 = 0, $r_sroa_0_1201 = 0, $r_sroa_1_1200 = 0, $q_sroa_0_1199 = 0, $q_sroa_1_1198 = 0, $147 = 0, $149 = 0, $r_sroa_0_0_insert_insert42$0 = 0, $r_sroa_0_0_insert_insert42$1 = 0, $150$1 = 0, $151$0 = 0, $152 = 0, $154$0 = 0, $r_sroa_0_0_extract_trunc = 0, $r_sroa_1_4_extract_trunc = 0, $155 = 0, $carry_0_lcssa$0 = 0, $carry_0_lcssa$1 = 0, $r_sroa_0_1_lcssa = 0, $r_sroa_1_1_lcssa = 0, $q_sroa_0_1_lcssa = 0, $q_sroa_1_1_lcssa = 0, $q_sroa_0_0_insert_ext75$0 = 0, $q_sroa_0_0_insert_ext75$1 = 0, $q_sroa_0_0_insert_insert77$1 = 0, $_0$0 = 0, $_0$1 = 0;
+    $n_sroa_0_0_extract_trunc = $a$0;
+    $n_sroa_1_4_extract_shift$0 = $a$1;
+    $n_sroa_1_4_extract_trunc = $n_sroa_1_4_extract_shift$0;
+    $d_sroa_0_0_extract_trunc = $b$0;
+    $d_sroa_1_4_extract_shift$0 = $b$1;
+    $d_sroa_1_4_extract_trunc = $d_sroa_1_4_extract_shift$0;
+    if (($n_sroa_1_4_extract_trunc | 0) == 0) {
+      $4 = ($rem | 0) != 0;
+      if (($d_sroa_1_4_extract_trunc | 0) == 0) {
+        if ($4) {
+          HEAP32[$rem >> 2] = ($n_sroa_0_0_extract_trunc >>> 0) % ($d_sroa_0_0_extract_trunc >>> 0);
+          HEAP32[$rem + 4 >> 2] = 0;
+        }
+        $_0$1 = 0;
+        $_0$0 = ($n_sroa_0_0_extract_trunc >>> 0) / ($d_sroa_0_0_extract_trunc >>> 0) >>> 0;
+        return (tempRet0 = $_0$1, $_0$0) | 0;
+      } else {
+        if (!$4) {
+          $_0$1 = 0;
+          $_0$0 = 0;
+          return (tempRet0 = $_0$1, $_0$0) | 0;
+        }
+        HEAP32[$rem >> 2] = $a$0 & -1;
+        HEAP32[$rem + 4 >> 2] = $a$1 & 0;
+        $_0$1 = 0;
+        $_0$0 = 0;
+        return (tempRet0 = $_0$1, $_0$0) | 0;
+      }
+    }
+    $17 = ($d_sroa_1_4_extract_trunc | 0) == 0;
+    do {
+      if (($d_sroa_0_0_extract_trunc | 0) == 0) {
+        if ($17) {
+          if (($rem | 0) != 0) {
+            HEAP32[$rem >> 2] = ($n_sroa_1_4_extract_trunc >>> 0) % ($d_sroa_0_0_extract_trunc >>> 0);
+            HEAP32[$rem + 4 >> 2] = 0;
+          }
+          $_0$1 = 0;
+          $_0$0 = ($n_sroa_1_4_extract_trunc >>> 0) / ($d_sroa_0_0_extract_trunc >>> 0) >>> 0;
+          return (tempRet0 = $_0$1, $_0$0) | 0;
+        }
+        if (($n_sroa_0_0_extract_trunc | 0) == 0) {
+          if (($rem | 0) != 0) {
+            HEAP32[$rem >> 2] = 0;
+            HEAP32[$rem + 4 >> 2] = ($n_sroa_1_4_extract_trunc >>> 0) % ($d_sroa_1_4_extract_trunc >>> 0);
+          }
+          $_0$1 = 0;
+          $_0$0 = ($n_sroa_1_4_extract_trunc >>> 0) / ($d_sroa_1_4_extract_trunc >>> 0) >>> 0;
+          return (tempRet0 = $_0$1, $_0$0) | 0;
+        }
+        $37 = $d_sroa_1_4_extract_trunc - 1 | 0;
+        if (($37 & $d_sroa_1_4_extract_trunc | 0) == 0) {
+          if (($rem | 0) != 0) {
+            HEAP32[$rem >> 2] = 0 | $a$0 & -1;
+            HEAP32[$rem + 4 >> 2] = $37 & $n_sroa_1_4_extract_trunc | $a$1 & 0;
+          }
+          $_0$1 = 0;
+          $_0$0 = $n_sroa_1_4_extract_trunc >>> ((_llvm_cttz_i32($d_sroa_1_4_extract_trunc | 0) | 0) >>> 0);
+          return (tempRet0 = $_0$1, $_0$0) | 0;
+        }
+        $49 = _llvm_ctlz_i32($d_sroa_1_4_extract_trunc | 0) | 0;
+        $51 = $49 - (_llvm_ctlz_i32($n_sroa_1_4_extract_trunc | 0) | 0) | 0;
+        if ($51 >>> 0 <= 30) {
+          $57 = $51 + 1 | 0;
+          $58 = 31 - $51 | 0;
+          $sr_1_ph = $57;
+          $r_sroa_0_1_ph = $n_sroa_1_4_extract_trunc << $58 | $n_sroa_0_0_extract_trunc >>> ($57 >>> 0);
+          $r_sroa_1_1_ph = $n_sroa_1_4_extract_trunc >>> ($57 >>> 0);
+          $q_sroa_0_1_ph = 0;
+          $q_sroa_1_1_ph = $n_sroa_0_0_extract_trunc << $58;
+          break;
+        }
+        if (($rem | 0) == 0) {
+          $_0$1 = 0;
+          $_0$0 = 0;
+          return (tempRet0 = $_0$1, $_0$0) | 0;
+        }
+        HEAP32[$rem >> 2] = 0 | $a$0 & -1;
+        HEAP32[$rem + 4 >> 2] = $n_sroa_1_4_extract_shift$0 | $a$1 & 0;
+        $_0$1 = 0;
+        $_0$0 = 0;
+        return (tempRet0 = $_0$1, $_0$0) | 0;
+      } else {
+        if (!$17) {
+          $117 = _llvm_ctlz_i32($d_sroa_1_4_extract_trunc | 0) | 0;
+          $119 = $117 - (_llvm_ctlz_i32($n_sroa_1_4_extract_trunc | 0) | 0) | 0;
+          if ($119 >>> 0 <= 31) {
+            $125 = $119 + 1 | 0;
+            $126 = 31 - $119 | 0;
+            $130 = $119 - 31 >> 31;
+            $sr_1_ph = $125;
+            $r_sroa_0_1_ph = $n_sroa_0_0_extract_trunc >>> ($125 >>> 0) & $130 | $n_sroa_1_4_extract_trunc << $126;
+            $r_sroa_1_1_ph = $n_sroa_1_4_extract_trunc >>> ($125 >>> 0) & $130;
+            $q_sroa_0_1_ph = 0;
+            $q_sroa_1_1_ph = $n_sroa_0_0_extract_trunc << $126;
+            break;
+          }
+          if (($rem | 0) == 0) {
+            $_0$1 = 0;
+            $_0$0 = 0;
+            return (tempRet0 = $_0$1, $_0$0) | 0;
+          }
+          HEAP32[$rem >> 2] = 0 | $a$0 & -1;
+          HEAP32[$rem + 4 >> 2] = $n_sroa_1_4_extract_shift$0 | $a$1 & 0;
+          $_0$1 = 0;
+          $_0$0 = 0;
+          return (tempRet0 = $_0$1, $_0$0) | 0;
+        }
+        $66 = $d_sroa_0_0_extract_trunc - 1 | 0;
+        if (($66 & $d_sroa_0_0_extract_trunc | 0) != 0) {
+          $86 = (_llvm_ctlz_i32($d_sroa_0_0_extract_trunc | 0) | 0) + 33 | 0;
+          $88 = $86 - (_llvm_ctlz_i32($n_sroa_1_4_extract_trunc | 0) | 0) | 0;
+          $89 = 64 - $88 | 0;
+          $91 = 32 - $88 | 0;
+          $92 = $91 >> 31;
+          $95 = $88 - 32 | 0;
+          $105 = $95 >> 31;
+          $sr_1_ph = $88;
+          $r_sroa_0_1_ph = $91 - 1 >> 31 & $n_sroa_1_4_extract_trunc >>> ($95 >>> 0) | ($n_sroa_1_4_extract_trunc << $91 | $n_sroa_0_0_extract_trunc >>> ($88 >>> 0)) & $105;
+          $r_sroa_1_1_ph = $105 & $n_sroa_1_4_extract_trunc >>> ($88 >>> 0);
+          $q_sroa_0_1_ph = $n_sroa_0_0_extract_trunc << $89 & $92;
+          $q_sroa_1_1_ph = ($n_sroa_1_4_extract_trunc << $89 | $n_sroa_0_0_extract_trunc >>> ($95 >>> 0)) & $92 | $n_sroa_0_0_extract_trunc << $91 & $88 - 33 >> 31;
+          break;
+        }
+        if (($rem | 0) != 0) {
+          HEAP32[$rem >> 2] = $66 & $n_sroa_0_0_extract_trunc;
+          HEAP32[$rem + 4 >> 2] = 0;
+        }
+        if (($d_sroa_0_0_extract_trunc | 0) == 1) {
+          $_0$1 = $n_sroa_1_4_extract_shift$0 | $a$1 & 0;
+          $_0$0 = 0 | $a$0 & -1;
+          return (tempRet0 = $_0$1, $_0$0) | 0;
+        } else {
+          $78 = _llvm_cttz_i32($d_sroa_0_0_extract_trunc | 0) | 0;
+          $_0$1 = 0 | $n_sroa_1_4_extract_trunc >>> ($78 >>> 0);
+          $_0$0 = $n_sroa_1_4_extract_trunc << 32 - $78 | $n_sroa_0_0_extract_trunc >>> ($78 >>> 0) | 0;
+          return (tempRet0 = $_0$1, $_0$0) | 0;
+        }
+      }
+    } while (0);
+    if (($sr_1_ph | 0) == 0) {
+      $q_sroa_1_1_lcssa = $q_sroa_1_1_ph;
+      $q_sroa_0_1_lcssa = $q_sroa_0_1_ph;
+      $r_sroa_1_1_lcssa = $r_sroa_1_1_ph;
+      $r_sroa_0_1_lcssa = $r_sroa_0_1_ph;
+      $carry_0_lcssa$1 = 0;
+      $carry_0_lcssa$0 = 0;
+    } else {
+      $d_sroa_0_0_insert_insert99$0 = 0 | $b$0 & -1;
+      $d_sroa_0_0_insert_insert99$1 = $d_sroa_1_4_extract_shift$0 | $b$1 & 0;
+      $137$0 = _i64Add($d_sroa_0_0_insert_insert99$0, $d_sroa_0_0_insert_insert99$1, -1, -1) | 0;
+      $137$1 = tempRet0;
+      $q_sroa_1_1198 = $q_sroa_1_1_ph;
+      $q_sroa_0_1199 = $q_sroa_0_1_ph;
+      $r_sroa_1_1200 = $r_sroa_1_1_ph;
+      $r_sroa_0_1201 = $r_sroa_0_1_ph;
+      $sr_1202 = $sr_1_ph;
+      $carry_0203 = 0;
+      while (1) {
+        $147 = $q_sroa_0_1199 >>> 31 | $q_sroa_1_1198 << 1;
+        $149 = $carry_0203 | $q_sroa_0_1199 << 1;
+        $r_sroa_0_0_insert_insert42$0 = 0 | ($r_sroa_0_1201 << 1 | $q_sroa_1_1198 >>> 31);
+        $r_sroa_0_0_insert_insert42$1 = $r_sroa_0_1201 >>> 31 | $r_sroa_1_1200 << 1 | 0;
+        _i64Subtract($137$0, $137$1, $r_sroa_0_0_insert_insert42$0, $r_sroa_0_0_insert_insert42$1) | 0;
+        $150$1 = tempRet0;
+        $151$0 = $150$1 >> 31 | (($150$1 | 0) < 0 ? -1 : 0) << 1;
+        $152 = $151$0 & 1;
+        $154$0 = _i64Subtract($r_sroa_0_0_insert_insert42$0, $r_sroa_0_0_insert_insert42$1, $151$0 & $d_sroa_0_0_insert_insert99$0, ((($150$1 | 0) < 0 ? -1 : 0) >> 31 | (($150$1 | 0) < 0 ? -1 : 0) << 1) & $d_sroa_0_0_insert_insert99$1) | 0;
+        $r_sroa_0_0_extract_trunc = $154$0;
+        $r_sroa_1_4_extract_trunc = tempRet0;
+        $155 = $sr_1202 - 1 | 0;
+        if (($155 | 0) == 0) {
+          break;
+        } else {
+          $q_sroa_1_1198 = $147;
+          $q_sroa_0_1199 = $149;
+          $r_sroa_1_1200 = $r_sroa_1_4_extract_trunc;
+          $r_sroa_0_1201 = $r_sroa_0_0_extract_trunc;
+          $sr_1202 = $155;
+          $carry_0203 = $152;
+        }
+      }
+      $q_sroa_1_1_lcssa = $147;
+      $q_sroa_0_1_lcssa = $149;
+      $r_sroa_1_1_lcssa = $r_sroa_1_4_extract_trunc;
+      $r_sroa_0_1_lcssa = $r_sroa_0_0_extract_trunc;
+      $carry_0_lcssa$1 = 0;
+      $carry_0_lcssa$0 = $152;
+    }
+    $q_sroa_0_0_insert_ext75$0 = $q_sroa_0_1_lcssa;
+    $q_sroa_0_0_insert_ext75$1 = 0;
+    $q_sroa_0_0_insert_insert77$1 = $q_sroa_1_1_lcssa | $q_sroa_0_0_insert_ext75$1;
+    if (($rem | 0) != 0) {
+      HEAP32[$rem >> 2] = 0 | $r_sroa_0_1_lcssa;
+      HEAP32[$rem + 4 >> 2] = $r_sroa_1_1_lcssa | 0;
+    }
+    $_0$1 = (0 | $q_sroa_0_0_insert_ext75$0) >>> 31 | $q_sroa_0_0_insert_insert77$1 << 1 | ($q_sroa_0_0_insert_ext75$1 << 1 | $q_sroa_0_0_insert_ext75$0 >>> 31) & 0 | $carry_0_lcssa$1;
+    $_0$0 = ($q_sroa_0_0_insert_ext75$0 << 1 | 0 >>> 31) & -2 | $carry_0_lcssa$0;
+    return (tempRet0 = $_0$1, $_0$0) | 0;
+  }
+  // =======================================================================
   // EMSCRIPTEN_END_FUNCS
-  // Warning: printing of i64 values may be slightly rounded! No deep i64 math used, so precise i64 code not included
-  var i64Math = null;
+  // TODO: strip out parts of this we do not need
+  //======= begin closure i64 code =======
+  // Copyright 2009 The Closure Library Authors. All Rights Reserved.
+  //
+  // Licensed under the Apache License, Version 2.0 (the "License");
+  // you may not use this file except in compliance with the License.
+  // You may obtain a copy of the License at
+  //
+  //      http://www.apache.org/licenses/LICENSE-2.0
+  //
+  // Unless required by applicable law or agreed to in writing, software
+  // distributed under the License is distributed on an "AS-IS" BASIS,
+  // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  // See the License for the specific language governing permissions and
+  // limitations under the License.
+  /**
+   * @fileoverview Defines a Long class for representing a 64-bit two's-complement
+   * integer value, which faithfully simulates the behavior of a Java "long". This
+   * implementation is derived from LongLib in GWT.
+   *
+   */
+  var i64Math = (function() { // Emscripten wrapper
+    var goog = { math: {} };
+    /**
+     * Constructs a 64-bit two's-complement integer, given its low and high 32-bit
+     * values as *signed* integers.  See the from* functions below for more
+     * convenient ways of constructing Longs.
+     *
+     * The internal representation of a long is the two given signed, 32-bit values.
+     * We use 32-bit pieces because these are the size of integers on which
+     * Javascript performs bit-operations.  For operations like addition and
+     * multiplication, we split each number into 16-bit pieces, which can easily be
+     * multiplied within Javascript's floating-point representation without overflow
+     * or change in sign.
+     *
+     * In the algorithms below, we frequently reduce the negative case to the
+     * positive case by negating the input(s) and then post-processing the result.
+     * Note that we must ALWAYS check specially whether those values are MIN_VALUE
+     * (-2^63) because -MIN_VALUE == MIN_VALUE (since 2^63 cannot be represented as
+     * a positive number, it overflows back into a negative).  Not handling this
+     * case would often result in infinite recursion.
+     *
+     * @param {number} low  The low (signed) 32 bits of the long.
+     * @param {number} high  The high (signed) 32 bits of the long.
+     * @constructor
+     */
+    goog.math.Long = function(low, high) {
+      /**
+       * @type {number}
+       * @private
+       */
+      this.low_ = low | 0;  // force into 32 signed bits.
+      /**
+       * @type {number}
+       * @private
+       */
+      this.high_ = high | 0;  // force into 32 signed bits.
+    };
+    // NOTE: Common constant values ZERO, ONE, NEG_ONE, etc. are defined below the
+    // from* methods on which they depend.
+    /**
+     * A cache of the Long representations of small integer values.
+     * @type {!Object}
+     * @private
+     */
+    goog.math.Long.IntCache_ = {};
+    /**
+     * Returns a Long representing the given (32-bit) integer value.
+     * @param {number} value The 32-bit integer in question.
+     * @return {!goog.math.Long} The corresponding Long value.
+     */
+    goog.math.Long.fromInt = function(value) {
+      if (-128 <= value && value < 128) {
+        var cachedObj = goog.math.Long.IntCache_[value];
+        if (cachedObj) {
+          return cachedObj;
+        }
+      }
+      var obj = new goog.math.Long(value | 0, value < 0 ? -1 : 0);
+      if (-128 <= value && value < 128) {
+        goog.math.Long.IntCache_[value] = obj;
+      }
+      return obj;
+    };
+    /**
+     * Returns a Long representing the given value, provided that it is a finite
+     * number.  Otherwise, zero is returned.
+     * @param {number} value The number in question.
+     * @return {!goog.math.Long} The corresponding Long value.
+     */
+    goog.math.Long.fromNumber = function(value) {
+      if (isNaN(value) || !isFinite(value)) {
+        return goog.math.Long.ZERO;
+      } else if (value <= -goog.math.Long.TWO_PWR_63_DBL_) {
+        return goog.math.Long.MIN_VALUE;
+      } else if (value + 1 >= goog.math.Long.TWO_PWR_63_DBL_) {
+        return goog.math.Long.MAX_VALUE;
+      } else if (value < 0) {
+        return goog.math.Long.fromNumber(-value).negate();
+      } else {
+        return new goog.math.Long(
+            (value % goog.math.Long.TWO_PWR_32_DBL_) | 0,
+            (value / goog.math.Long.TWO_PWR_32_DBL_) | 0);
+      }
+    };
+    /**
+     * Returns a Long representing the 64-bit integer that comes by concatenating
+     * the given high and low bits.  Each is assumed to use 32 bits.
+     * @param {number} lowBits The low 32-bits.
+     * @param {number} highBits The high 32-bits.
+     * @return {!goog.math.Long} The corresponding Long value.
+     */
+    goog.math.Long.fromBits = function(lowBits, highBits) {
+      return new goog.math.Long(lowBits, highBits);
+    };
+    /**
+     * Returns a Long representation of the given string, written using the given
+     * radix.
+     * @param {string} str The textual representation of the Long.
+     * @param {number=} opt_radix The radix in which the text is written.
+     * @return {!goog.math.Long} The corresponding Long value.
+     */
+    goog.math.Long.fromString = function(str, opt_radix) {
+      if (str.length == 0) {
+        throw Error('number format error: empty string');
+      }
+      var radix = opt_radix || 10;
+      if (radix < 2 || 36 < radix) {
+        throw Error('radix out of range: ' + radix);
+      }
+      if (str.charAt(0) == '-') {
+        return goog.math.Long.fromString(str.substring(1), radix).negate();
+      } else if (str.indexOf('-') >= 0) {
+        throw Error('number format error: interior "-" character: ' + str);
+      }
+      // Do several (8) digits each time through the loop, so as to
+      // minimize the calls to the very expensive emulated div.
+      var radixToPower = goog.math.Long.fromNumber(Math.pow(radix, 8));
+      var result = goog.math.Long.ZERO;
+      for (var i = 0; i < str.length; i += 8) {
+        var size = Math.min(8, str.length - i);
+        var value = parseInt(str.substring(i, i + size), radix);
+        if (size < 8) {
+          var power = goog.math.Long.fromNumber(Math.pow(radix, size));
+          result = result.multiply(power).add(goog.math.Long.fromNumber(value));
+        } else {
+          result = result.multiply(radixToPower);
+          result = result.add(goog.math.Long.fromNumber(value));
+        }
+      }
+      return result;
+    };
+    // NOTE: the compiler should inline these constant values below and then remove
+    // these variables, so there should be no runtime penalty for these.
+    /**
+     * Number used repeated below in calculations.  This must appear before the
+     * first call to any from* function below.
+     * @type {number}
+     * @private
+     */
+    goog.math.Long.TWO_PWR_16_DBL_ = 1 << 16;
+    /**
+     * @type {number}
+     * @private
+     */
+    goog.math.Long.TWO_PWR_24_DBL_ = 1 << 24;
+    /**
+     * @type {number}
+     * @private
+     */
+    goog.math.Long.TWO_PWR_32_DBL_ =
+        goog.math.Long.TWO_PWR_16_DBL_ * goog.math.Long.TWO_PWR_16_DBL_;
+    /**
+     * @type {number}
+     * @private
+     */
+    goog.math.Long.TWO_PWR_31_DBL_ =
+        goog.math.Long.TWO_PWR_32_DBL_ / 2;
+    /**
+     * @type {number}
+     * @private
+     */
+    goog.math.Long.TWO_PWR_48_DBL_ =
+        goog.math.Long.TWO_PWR_32_DBL_ * goog.math.Long.TWO_PWR_16_DBL_;
+    /**
+     * @type {number}
+     * @private
+     */
+    goog.math.Long.TWO_PWR_64_DBL_ =
+        goog.math.Long.TWO_PWR_32_DBL_ * goog.math.Long.TWO_PWR_32_DBL_;
+    /**
+     * @type {number}
+     * @private
+     */
+    goog.math.Long.TWO_PWR_63_DBL_ =
+        goog.math.Long.TWO_PWR_64_DBL_ / 2;
+    /** @type {!goog.math.Long} */
+    goog.math.Long.ZERO = goog.math.Long.fromInt(0);
+    /** @type {!goog.math.Long} */
+    goog.math.Long.ONE = goog.math.Long.fromInt(1);
+    /** @type {!goog.math.Long} */
+    goog.math.Long.NEG_ONE = goog.math.Long.fromInt(-1);
+    /** @type {!goog.math.Long} */
+    goog.math.Long.MAX_VALUE =
+        goog.math.Long.fromBits(0xFFFFFFFF | 0, 0x7FFFFFFF | 0);
+    /** @type {!goog.math.Long} */
+    goog.math.Long.MIN_VALUE = goog.math.Long.fromBits(0, 0x80000000 | 0);
+    /**
+     * @type {!goog.math.Long}
+     * @private
+     */
+    goog.math.Long.TWO_PWR_24_ = goog.math.Long.fromInt(1 << 24);
+    /** @return {number} The value, assuming it is a 32-bit integer. */
+    goog.math.Long.prototype.toInt = function() {
+      return this.low_;
+    };
+    /** @return {number} The closest floating-point representation to this value. */
+    goog.math.Long.prototype.toNumber = function() {
+      return this.high_ * goog.math.Long.TWO_PWR_32_DBL_ +
+             this.getLowBitsUnsigned();
+    };
+    /**
+     * @param {number=} opt_radix The radix in which the text should be written.
+     * @return {string} The textual representation of this value.
+     */
+    goog.math.Long.prototype.toString = function(opt_radix) {
+      var radix = opt_radix || 10;
+      if (radix < 2 || 36 < radix) {
+        throw Error('radix out of range: ' + radix);
+      }
+      if (this.isZero()) {
+        return '0';
+      }
+      if (this.isNegative()) {
+        if (this.equals(goog.math.Long.MIN_VALUE)) {
+          // We need to change the Long value before it can be negated, so we remove
+          // the bottom-most digit in this base and then recurse to do the rest.
+          var radixLong = goog.math.Long.fromNumber(radix);
+          var div = this.div(radixLong);
+          var rem = div.multiply(radixLong).subtract(this);
+          return div.toString(radix) + rem.toInt().toString(radix);
+        } else {
+          return '-' + this.negate().toString(radix);
+        }
+      }
+      // Do several (6) digits each time through the loop, so as to
+      // minimize the calls to the very expensive emulated div.
+      var radixToPower = goog.math.Long.fromNumber(Math.pow(radix, 6));
+      var rem = this;
+      var result = '';
+      while (true) {
+        var remDiv = rem.div(radixToPower);
+        var intval = rem.subtract(remDiv.multiply(radixToPower)).toInt();
+        var digits = intval.toString(radix);
+        rem = remDiv;
+        if (rem.isZero()) {
+          return digits + result;
+        } else {
+          while (digits.length < 6) {
+            digits = '0' + digits;
+          }
+          result = '' + digits + result;
+        }
+      }
+    };
+    /** @return {number} The high 32-bits as a signed value. */
+    goog.math.Long.prototype.getHighBits = function() {
+      return this.high_;
+    };
+    /** @return {number} The low 32-bits as a signed value. */
+    goog.math.Long.prototype.getLowBits = function() {
+      return this.low_;
+    };
+    /** @return {number} The low 32-bits as an unsigned value. */
+    goog.math.Long.prototype.getLowBitsUnsigned = function() {
+      return (this.low_ >= 0) ?
+          this.low_ : goog.math.Long.TWO_PWR_32_DBL_ + this.low_;
+    };
+    /**
+     * @return {number} Returns the number of bits needed to represent the absolute
+     *     value of this Long.
+     */
+    goog.math.Long.prototype.getNumBitsAbs = function() {
+      if (this.isNegative()) {
+        if (this.equals(goog.math.Long.MIN_VALUE)) {
+          return 64;
+        } else {
+          return this.negate().getNumBitsAbs();
+        }
+      } else {
+        var val = this.high_ != 0 ? this.high_ : this.low_;
+        for (var bit = 31; bit > 0; bit--) {
+          if ((val & (1 << bit)) != 0) {
+            break;
+          }
+        }
+        return this.high_ != 0 ? bit + 33 : bit + 1;
+      }
+    };
+    /** @return {boolean} Whether this value is zero. */
+    goog.math.Long.prototype.isZero = function() {
+      return this.high_ == 0 && this.low_ == 0;
+    };
+    /** @return {boolean} Whether this value is negative. */
+    goog.math.Long.prototype.isNegative = function() {
+      return this.high_ < 0;
+    };
+    /** @return {boolean} Whether this value is odd. */
+    goog.math.Long.prototype.isOdd = function() {
+      return (this.low_ & 1) == 1;
+    };
+    /**
+     * @param {goog.math.Long} other Long to compare against.
+     * @return {boolean} Whether this Long equals the other.
+     */
+    goog.math.Long.prototype.equals = function(other) {
+      return (this.high_ == other.high_) && (this.low_ == other.low_);
+    };
+    /**
+     * @param {goog.math.Long} other Long to compare against.
+     * @return {boolean} Whether this Long does not equal the other.
+     */
+    goog.math.Long.prototype.notEquals = function(other) {
+      return (this.high_ != other.high_) || (this.low_ != other.low_);
+    };
+    /**
+     * @param {goog.math.Long} other Long to compare against.
+     * @return {boolean} Whether this Long is less than the other.
+     */
+    goog.math.Long.prototype.lessThan = function(other) {
+      return this.compare(other) < 0;
+    };
+    /**
+     * @param {goog.math.Long} other Long to compare against.
+     * @return {boolean} Whether this Long is less than or equal to the other.
+     */
+    goog.math.Long.prototype.lessThanOrEqual = function(other) {
+      return this.compare(other) <= 0;
+    };
+    /**
+     * @param {goog.math.Long} other Long to compare against.
+     * @return {boolean} Whether this Long is greater than the other.
+     */
+    goog.math.Long.prototype.greaterThan = function(other) {
+      return this.compare(other) > 0;
+    };
+    /**
+     * @param {goog.math.Long} other Long to compare against.
+     * @return {boolean} Whether this Long is greater than or equal to the other.
+     */
+    goog.math.Long.prototype.greaterThanOrEqual = function(other) {
+      return this.compare(other) >= 0;
+    };
+    /**
+     * Compares this Long with the given one.
+     * @param {goog.math.Long} other Long to compare against.
+     * @return {number} 0 if they are the same, 1 if the this is greater, and -1
+     *     if the given one is greater.
+     */
+    goog.math.Long.prototype.compare = function(other) {
+      if (this.equals(other)) {
+        return 0;
+      }
+      var thisNeg = this.isNegative();
+      var otherNeg = other.isNegative();
+      if (thisNeg && !otherNeg) {
+        return -1;
+      }
+      if (!thisNeg && otherNeg) {
+        return 1;
+      }
+      // at this point, the signs are the same, so subtraction will not overflow
+      if (this.subtract(other).isNegative()) {
+        return -1;
+      } else {
+        return 1;
+      }
+    };
+    /** @return {!goog.math.Long} The negation of this value. */
+    goog.math.Long.prototype.negate = function() {
+      if (this.equals(goog.math.Long.MIN_VALUE)) {
+        return goog.math.Long.MIN_VALUE;
+      } else {
+        return this.not().add(goog.math.Long.ONE);
+      }
+    };
+    /**
+     * Returns the sum of this and the given Long.
+     * @param {goog.math.Long} other Long to add to this one.
+     * @return {!goog.math.Long} The sum of this and the given Long.
+     */
+    goog.math.Long.prototype.add = function(other) {
+      // Divide each number into 4 chunks of 16 bits, and then sum the chunks.
+      var a48 = this.high_ >>> 16;
+      var a32 = this.high_ & 0xFFFF;
+      var a16 = this.low_ >>> 16;
+      var a00 = this.low_ & 0xFFFF;
+      var b48 = other.high_ >>> 16;
+      var b32 = other.high_ & 0xFFFF;
+      var b16 = other.low_ >>> 16;
+      var b00 = other.low_ & 0xFFFF;
+      var c48 = 0, c32 = 0, c16 = 0, c00 = 0;
+      c00 += a00 + b00;
+      c16 += c00 >>> 16;
+      c00 &= 0xFFFF;
+      c16 += a16 + b16;
+      c32 += c16 >>> 16;
+      c16 &= 0xFFFF;
+      c32 += a32 + b32;
+      c48 += c32 >>> 16;
+      c32 &= 0xFFFF;
+      c48 += a48 + b48;
+      c48 &= 0xFFFF;
+      return goog.math.Long.fromBits((c16 << 16) | c00, (c48 << 16) | c32);
+    };
+    /**
+     * Returns the difference of this and the given Long.
+     * @param {goog.math.Long} other Long to subtract from this.
+     * @return {!goog.math.Long} The difference of this and the given Long.
+     */
+    goog.math.Long.prototype.subtract = function(other) {
+      return this.add(other.negate());
+    };
+    /**
+     * Returns the product of this and the given long.
+     * @param {goog.math.Long} other Long to multiply with this.
+     * @return {!goog.math.Long} The product of this and the other.
+     */
+    goog.math.Long.prototype.multiply = function(other) {
+      if (this.isZero()) {
+        return goog.math.Long.ZERO;
+      } else if (other.isZero()) {
+        return goog.math.Long.ZERO;
+      }
+      if (this.equals(goog.math.Long.MIN_VALUE)) {
+        return other.isOdd() ? goog.math.Long.MIN_VALUE : goog.math.Long.ZERO;
+      } else if (other.equals(goog.math.Long.MIN_VALUE)) {
+        return this.isOdd() ? goog.math.Long.MIN_VALUE : goog.math.Long.ZERO;
+      }
+      if (this.isNegative()) {
+        if (other.isNegative()) {
+          return this.negate().multiply(other.negate());
+        } else {
+          return this.negate().multiply(other).negate();
+        }
+      } else if (other.isNegative()) {
+        return this.multiply(other.negate()).negate();
+      }
+      // If both longs are small, use float multiplication
+      if (this.lessThan(goog.math.Long.TWO_PWR_24_) &&
+          other.lessThan(goog.math.Long.TWO_PWR_24_)) {
+        return goog.math.Long.fromNumber(this.toNumber() * other.toNumber());
+      }
+      // Divide each long into 4 chunks of 16 bits, and then add up 4x4 products.
+      // We can skip products that would overflow.
+      var a48 = this.high_ >>> 16;
+      var a32 = this.high_ & 0xFFFF;
+      var a16 = this.low_ >>> 16;
+      var a00 = this.low_ & 0xFFFF;
+      var b48 = other.high_ >>> 16;
+      var b32 = other.high_ & 0xFFFF;
+      var b16 = other.low_ >>> 16;
+      var b00 = other.low_ & 0xFFFF;
+      var c48 = 0, c32 = 0, c16 = 0, c00 = 0;
+      c00 += a00 * b00;
+      c16 += c00 >>> 16;
+      c00 &= 0xFFFF;
+      c16 += a16 * b00;
+      c32 += c16 >>> 16;
+      c16 &= 0xFFFF;
+      c16 += a00 * b16;
+      c32 += c16 >>> 16;
+      c16 &= 0xFFFF;
+      c32 += a32 * b00;
+      c48 += c32 >>> 16;
+      c32 &= 0xFFFF;
+      c32 += a16 * b16;
+      c48 += c32 >>> 16;
+      c32 &= 0xFFFF;
+      c32 += a00 * b32;
+      c48 += c32 >>> 16;
+      c32 &= 0xFFFF;
+      c48 += a48 * b00 + a32 * b16 + a16 * b32 + a00 * b48;
+      c48 &= 0xFFFF;
+      return goog.math.Long.fromBits((c16 << 16) | c00, (c48 << 16) | c32);
+    };
+    /**
+     * Returns this Long divided by the given one.
+     * @param {goog.math.Long} other Long by which to divide.
+     * @return {!goog.math.Long} This Long divided by the given one.
+     */
+    goog.math.Long.prototype.div = function(other) {
+      if (other.isZero()) {
+        throw Error('division by zero');
+      } else if (this.isZero()) {
+        return goog.math.Long.ZERO;
+      }
+      if (this.equals(goog.math.Long.MIN_VALUE)) {
+        if (other.equals(goog.math.Long.ONE) ||
+            other.equals(goog.math.Long.NEG_ONE)) {
+          return goog.math.Long.MIN_VALUE;  // recall that -MIN_VALUE == MIN_VALUE
+        } else if (other.equals(goog.math.Long.MIN_VALUE)) {
+          return goog.math.Long.ONE;
+        } else {
+          // At this point, we have |other| >= 2, so |this/other| < |MIN_VALUE|.
+          var halfThis = this.shiftRight(1);
+          var approx = halfThis.div(other).shiftLeft(1);
+          if (approx.equals(goog.math.Long.ZERO)) {
+            return other.isNegative() ? goog.math.Long.ONE : goog.math.Long.NEG_ONE;
+          } else {
+            var rem = this.subtract(other.multiply(approx));
+            var result = approx.add(rem.div(other));
+            return result;
+          }
+        }
+      } else if (other.equals(goog.math.Long.MIN_VALUE)) {
+        return goog.math.Long.ZERO;
+      }
+      if (this.isNegative()) {
+        if (other.isNegative()) {
+          return this.negate().div(other.negate());
+        } else {
+          return this.negate().div(other).negate();
+        }
+      } else if (other.isNegative()) {
+        return this.div(other.negate()).negate();
+      }
+      // Repeat the following until the remainder is less than other:  find a
+      // floating-point that approximates remainder / other *from below*, add this
+      // into the result, and subtract it from the remainder.  It is critical that
+      // the approximate value is less than or equal to the real value so that the
+      // remainder never becomes negative.
+      var res = goog.math.Long.ZERO;
+      var rem = this;
+      while (rem.greaterThanOrEqual(other)) {
+        // Approximate the result of division. This may be a little greater or
+        // smaller than the actual value.
+        var approx = Math.max(1, Math.floor(rem.toNumber() / other.toNumber()));
+        // We will tweak the approximate result by changing it in the 48-th digit or
+        // the smallest non-fractional digit, whichever is larger.
+        var log2 = Math.ceil(Math.log(approx) / Math.LN2);
+        var delta = (log2 <= 48) ? 1 : Math.pow(2, log2 - 48);
+        // Decrease the approximation until it is smaller than the remainder.  Note
+        // that if it is too large, the product overflows and is negative.
+        var approxRes = goog.math.Long.fromNumber(approx);
+        var approxRem = approxRes.multiply(other);
+        while (approxRem.isNegative() || approxRem.greaterThan(rem)) {
+          approx -= delta;
+          approxRes = goog.math.Long.fromNumber(approx);
+          approxRem = approxRes.multiply(other);
+        }
+        // We know the answer can't be zero... and actually, zero would cause
+        // infinite recursion since we would make no progress.
+        if (approxRes.isZero()) {
+          approxRes = goog.math.Long.ONE;
+        }
+        res = res.add(approxRes);
+        rem = rem.subtract(approxRem);
+      }
+      return res;
+    };
+    /**
+     * Returns this Long modulo the given one.
+     * @param {goog.math.Long} other Long by which to mod.
+     * @return {!goog.math.Long} This Long modulo the given one.
+     */
+    goog.math.Long.prototype.modulo = function(other) {
+      return this.subtract(this.div(other).multiply(other));
+    };
+    /** @return {!goog.math.Long} The bitwise-NOT of this value. */
+    goog.math.Long.prototype.not = function() {
+      return goog.math.Long.fromBits(~this.low_, ~this.high_);
+    };
+    /**
+     * Returns the bitwise-AND of this Long and the given one.
+     * @param {goog.math.Long} other The Long with which to AND.
+     * @return {!goog.math.Long} The bitwise-AND of this and the other.
+     */
+    goog.math.Long.prototype.and = function(other) {
+      return goog.math.Long.fromBits(this.low_ & other.low_,
+                                     this.high_ & other.high_);
+    };
+    /**
+     * Returns the bitwise-OR of this Long and the given one.
+     * @param {goog.math.Long} other The Long with which to OR.
+     * @return {!goog.math.Long} The bitwise-OR of this and the other.
+     */
+    goog.math.Long.prototype.or = function(other) {
+      return goog.math.Long.fromBits(this.low_ | other.low_,
+                                     this.high_ | other.high_);
+    };
+    /**
+     * Returns the bitwise-XOR of this Long and the given one.
+     * @param {goog.math.Long} other The Long with which to XOR.
+     * @return {!goog.math.Long} The bitwise-XOR of this and the other.
+     */
+    goog.math.Long.prototype.xor = function(other) {
+      return goog.math.Long.fromBits(this.low_ ^ other.low_,
+                                     this.high_ ^ other.high_);
+    };
+    /**
+     * Returns this Long with bits shifted to the left by the given amount.
+     * @param {number} numBits The number of bits by which to shift.
+     * @return {!goog.math.Long} This shifted to the left by the given amount.
+     */
+    goog.math.Long.prototype.shiftLeft = function(numBits) {
+      numBits &= 63;
+      if (numBits == 0) {
+        return this;
+      } else {
+        var low = this.low_;
+        if (numBits < 32) {
+          var high = this.high_;
+          return goog.math.Long.fromBits(
+              low << numBits,
+              (high << numBits) | (low >>> (32 - numBits)));
+        } else {
+          return goog.math.Long.fromBits(0, low << (numBits - 32));
+        }
+      }
+    };
+    /**
+     * Returns this Long with bits shifted to the right by the given amount.
+     * @param {number} numBits The number of bits by which to shift.
+     * @return {!goog.math.Long} This shifted to the right by the given amount.
+     */
+    goog.math.Long.prototype.shiftRight = function(numBits) {
+      numBits &= 63;
+      if (numBits == 0) {
+        return this;
+      } else {
+        var high = this.high_;
+        if (numBits < 32) {
+          var low = this.low_;
+          return goog.math.Long.fromBits(
+              (low >>> numBits) | (high << (32 - numBits)),
+              high >> numBits);
+        } else {
+          return goog.math.Long.fromBits(
+              high >> (numBits - 32),
+              high >= 0 ? 0 : -1);
+        }
+      }
+    };
+    /**
+     * Returns this Long with bits shifted to the right by the given amount, with
+     * the new top bits matching the current sign bit.
+     * @param {number} numBits The number of bits by which to shift.
+     * @return {!goog.math.Long} This shifted to the right by the given amount, with
+     *     zeros placed into the new leading bits.
+     */
+    goog.math.Long.prototype.shiftRightUnsigned = function(numBits) {
+      numBits &= 63;
+      if (numBits == 0) {
+        return this;
+      } else {
+        var high = this.high_;
+        if (numBits < 32) {
+          var low = this.low_;
+          return goog.math.Long.fromBits(
+              (low >>> numBits) | (high << (32 - numBits)),
+              high >>> numBits);
+        } else if (numBits == 32) {
+          return goog.math.Long.fromBits(high, 0);
+        } else {
+          return goog.math.Long.fromBits(high >>> (numBits - 32), 0);
+        }
+      }
+    };
+    //======= begin jsbn =======
+    var navigator = { appName: 'Modern Browser' }; // polyfill a little
+    // Copyright (c) 2005  Tom Wu
+    // All Rights Reserved.
+    // http://www-cs-students.stanford.edu/~tjw/jsbn/
+    /*
+     * Copyright (c) 2003-2005  Tom Wu
+     * All Rights Reserved.
+     *
+     * Permission is hereby granted, free of charge, to any person obtaining
+     * a copy of this software and associated documentation files (the
+     * "Software"), to deal in the Software without restriction, including
+     * without limitation the rights to use, copy, modify, merge, publish,
+     * distribute, sublicense, and/or sell copies of the Software, and to
+     * permit persons to whom the Software is furnished to do so, subject to
+     * the following conditions:
+     *
+     * The above copyright notice and this permission notice shall be
+     * included in all copies or substantial portions of the Software.
+     *
+     * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+     * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+     * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+     *
+     * IN NO EVENT SHALL TOM WU BE LIABLE FOR ANY SPECIAL, INCIDENTAL,
+     * INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER
+     * RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER OR NOT ADVISED OF
+     * THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF LIABILITY, ARISING OUT
+     * OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+     *
+     * In addition, the following condition applies:
+     *
+     * All redistributions must retain an intact copy of this copyright notice
+     * and disclaimer.
+     */
+    // Basic JavaScript BN library - subset useful for RSA encryption.
+    // Bits per digit
+    var dbits;
+    // JavaScript engine analysis
+    var canary = 0xdeadbeefcafe;
+    var j_lm = ((canary&0xffffff)==0xefcafe);
+    // (public) Constructor
+    function BigInteger(a,b,c) {
+      if(a != null)
+        if("number" == typeof a) this.fromNumber(a,b,c);
+        else if(b == null && "string" != typeof a) this.fromString(a,256);
+        else this.fromString(a,b);
+    }
+    // return new, unset BigInteger
+    function nbi() { return new BigInteger(null); }
+    // am: Compute w_j += (x*this_i), propagate carries,
+    // c is initial carry, returns final carry.
+    // c < 3*dvalue, x < 2*dvalue, this_i < dvalue
+    // We need to select the fastest one that works in this environment.
+    // am1: use a single mult and divide to get the high bits,
+    // max digit bits should be 26 because
+    // max internal value = 2*dvalue^2-2*dvalue (< 2^53)
+    function am1(i,x,w,j,c,n) {
+      while(--n >= 0) {
+        var v = x*this[i++]+w[j]+c;
+        c = Math.floor(v/0x4000000);
+        w[j++] = v&0x3ffffff;
+      }
+      return c;
+    }
+    // am2 avoids a big mult-and-extract completely.
+    // Max digit bits should be <= 30 because we do bitwise ops
+    // on values up to 2*hdvalue^2-hdvalue-1 (< 2^31)
+    function am2(i,x,w,j,c,n) {
+      var xl = x&0x7fff, xh = x>>15;
+      while(--n >= 0) {
+        var l = this[i]&0x7fff;
+        var h = this[i++]>>15;
+        var m = xh*l+h*xl;
+        l = xl*l+((m&0x7fff)<<15)+w[j]+(c&0x3fffffff);
+        c = (l>>>30)+(m>>>15)+xh*h+(c>>>30);
+        w[j++] = l&0x3fffffff;
+      }
+      return c;
+    }
+    // Alternately, set max digit bits to 28 since some
+    // browsers slow down when dealing with 32-bit numbers.
+    function am3(i,x,w,j,c,n) {
+      var xl = x&0x3fff, xh = x>>14;
+      while(--n >= 0) {
+        var l = this[i]&0x3fff;
+        var h = this[i++]>>14;
+        var m = xh*l+h*xl;
+        l = xl*l+((m&0x3fff)<<14)+w[j]+c;
+        c = (l>>28)+(m>>14)+xh*h;
+        w[j++] = l&0xfffffff;
+      }
+      return c;
+    }
+    if(j_lm && (navigator.appName == "Microsoft Internet Explorer")) {
+      BigInteger.prototype.am = am2;
+      dbits = 30;
+    }
+    else if(j_lm && (navigator.appName != "Netscape")) {
+      BigInteger.prototype.am = am1;
+      dbits = 26;
+    }
+    else { // Mozilla/Netscape seems to prefer am3
+      BigInteger.prototype.am = am3;
+      dbits = 28;
+    }
+    BigInteger.prototype.DB = dbits;
+    BigInteger.prototype.DM = ((1<<dbits)-1);
+    BigInteger.prototype.DV = (1<<dbits);
+    var BI_FP = 52;
+    BigInteger.prototype.FV = Math.pow(2,BI_FP);
+    BigInteger.prototype.F1 = BI_FP-dbits;
+    BigInteger.prototype.F2 = 2*dbits-BI_FP;
+    // Digit conversions
+    var BI_RM = "0123456789abcdefghijklmnopqrstuvwxyz";
+    var BI_RC = new Array();
+    var rr,vv;
+    rr = "0".charCodeAt(0);
+    for(vv = 0; vv <= 9; ++vv) BI_RC[rr++] = vv;
+    rr = "a".charCodeAt(0);
+    for(vv = 10; vv < 36; ++vv) BI_RC[rr++] = vv;
+    rr = "A".charCodeAt(0);
+    for(vv = 10; vv < 36; ++vv) BI_RC[rr++] = vv;
+    function int2char(n) { return BI_RM.charAt(n); }
+    function intAt(s,i) {
+      var c = BI_RC[s.charCodeAt(i)];
+      return (c==null)?-1:c;
+    }
+    // (protected) copy this to r
+    function bnpCopyTo(r) {
+      for(var i = this.t-1; i >= 0; --i) r[i] = this[i];
+      r.t = this.t;
+      r.s = this.s;
+    }
+    // (protected) set from integer value x, -DV <= x < DV
+    function bnpFromInt(x) {
+      this.t = 1;
+      this.s = (x<0)?-1:0;
+      if(x > 0) this[0] = x;
+      else if(x < -1) this[0] = x+DV;
+      else this.t = 0;
+    }
+    // return bigint initialized to value
+    function nbv(i) { var r = nbi(); r.fromInt(i); return r; }
+    // (protected) set from string and radix
+    function bnpFromString(s,b) {
+      var k;
+      if(b == 16) k = 4;
+      else if(b == 8) k = 3;
+      else if(b == 256) k = 8; // byte array
+      else if(b == 2) k = 1;
+      else if(b == 32) k = 5;
+      else if(b == 4) k = 2;
+      else { this.fromRadix(s,b); return; }
+      this.t = 0;
+      this.s = 0;
+      var i = s.length, mi = false, sh = 0;
+      while(--i >= 0) {
+        var x = (k==8)?s[i]&0xff:intAt(s,i);
+        if(x < 0) {
+          if(s.charAt(i) == "-") mi = true;
+          continue;
+        }
+        mi = false;
+        if(sh == 0)
+          this[this.t++] = x;
+        else if(sh+k > this.DB) {
+          this[this.t-1] |= (x&((1<<(this.DB-sh))-1))<<sh;
+          this[this.t++] = (x>>(this.DB-sh));
+        }
+        else
+          this[this.t-1] |= x<<sh;
+        sh += k;
+        if(sh >= this.DB) sh -= this.DB;
+      }
+      if(k == 8 && (s[0]&0x80) != 0) {
+        this.s = -1;
+        if(sh > 0) this[this.t-1] |= ((1<<(this.DB-sh))-1)<<sh;
+      }
+      this.clamp();
+      if(mi) BigInteger.ZERO.subTo(this,this);
+    }
+    // (protected) clamp off excess high words
+    function bnpClamp() {
+      var c = this.s&this.DM;
+      while(this.t > 0 && this[this.t-1] == c) --this.t;
+    }
+    // (public) return string representation in given radix
+    function bnToString(b) {
+      if(this.s < 0) return "-"+this.negate().toString(b);
+      var k;
+      if(b == 16) k = 4;
+      else if(b == 8) k = 3;
+      else if(b == 2) k = 1;
+      else if(b == 32) k = 5;
+      else if(b == 4) k = 2;
+      else return this.toRadix(b);
+      var km = (1<<k)-1, d, m = false, r = "", i = this.t;
+      var p = this.DB-(i*this.DB)%k;
+      if(i-- > 0) {
+        if(p < this.DB && (d = this[i]>>p) > 0) { m = true; r = int2char(d); }
+        while(i >= 0) {
+          if(p < k) {
+            d = (this[i]&((1<<p)-1))<<(k-p);
+            d |= this[--i]>>(p+=this.DB-k);
+          }
+          else {
+            d = (this[i]>>(p-=k))&km;
+            if(p <= 0) { p += this.DB; --i; }
+          }
+          if(d > 0) m = true;
+          if(m) r += int2char(d);
+        }
+      }
+      return m?r:"0";
+    }
+    // (public) -this
+    function bnNegate() { var r = nbi(); BigInteger.ZERO.subTo(this,r); return r; }
+    // (public) |this|
+    function bnAbs() { return (this.s<0)?this.negate():this; }
+    // (public) return + if this > a, - if this < a, 0 if equal
+    function bnCompareTo(a) {
+      var r = this.s-a.s;
+      if(r != 0) return r;
+      var i = this.t;
+      r = i-a.t;
+      if(r != 0) return (this.s<0)?-r:r;
+      while(--i >= 0) if((r=this[i]-a[i]) != 0) return r;
+      return 0;
+    }
+    // returns bit length of the integer x
+    function nbits(x) {
+      var r = 1, t;
+      if((t=x>>>16) != 0) { x = t; r += 16; }
+      if((t=x>>8) != 0) { x = t; r += 8; }
+      if((t=x>>4) != 0) { x = t; r += 4; }
+      if((t=x>>2) != 0) { x = t; r += 2; }
+      if((t=x>>1) != 0) { x = t; r += 1; }
+      return r;
+    }
+    // (public) return the number of bits in "this"
+    function bnBitLength() {
+      if(this.t <= 0) return 0;
+      return this.DB*(this.t-1)+nbits(this[this.t-1]^(this.s&this.DM));
+    }
+    // (protected) r = this << n*DB
+    function bnpDLShiftTo(n,r) {
+      var i;
+      for(i = this.t-1; i >= 0; --i) r[i+n] = this[i];
+      for(i = n-1; i >= 0; --i) r[i] = 0;
+      r.t = this.t+n;
+      r.s = this.s;
+    }
+    // (protected) r = this >> n*DB
+    function bnpDRShiftTo(n,r) {
+      for(var i = n; i < this.t; ++i) r[i-n] = this[i];
+      r.t = Math.max(this.t-n,0);
+      r.s = this.s;
+    }
+    // (protected) r = this << n
+    function bnpLShiftTo(n,r) {
+      var bs = n%this.DB;
+      var cbs = this.DB-bs;
+      var bm = (1<<cbs)-1;
+      var ds = Math.floor(n/this.DB), c = (this.s<<bs)&this.DM, i;
+      for(i = this.t-1; i >= 0; --i) {
+        r[i+ds+1] = (this[i]>>cbs)|c;
+        c = (this[i]&bm)<<bs;
+      }
+      for(i = ds-1; i >= 0; --i) r[i] = 0;
+      r[ds] = c;
+      r.t = this.t+ds+1;
+      r.s = this.s;
+      r.clamp();
+    }
+    // (protected) r = this >> n
+    function bnpRShiftTo(n,r) {
+      r.s = this.s;
+      var ds = Math.floor(n/this.DB);
+      if(ds >= this.t) { r.t = 0; return; }
+      var bs = n%this.DB;
+      var cbs = this.DB-bs;
+      var bm = (1<<bs)-1;
+      r[0] = this[ds]>>bs;
+      for(var i = ds+1; i < this.t; ++i) {
+        r[i-ds-1] |= (this[i]&bm)<<cbs;
+        r[i-ds] = this[i]>>bs;
+      }
+      if(bs > 0) r[this.t-ds-1] |= (this.s&bm)<<cbs;
+      r.t = this.t-ds;
+      r.clamp();
+    }
+    // (protected) r = this - a
+    function bnpSubTo(a,r) {
+      var i = 0, c = 0, m = Math.min(a.t,this.t);
+      while(i < m) {
+        c += this[i]-a[i];
+        r[i++] = c&this.DM;
+        c >>= this.DB;
+      }
+      if(a.t < this.t) {
+        c -= a.s;
+        while(i < this.t) {
+          c += this[i];
+          r[i++] = c&this.DM;
+          c >>= this.DB;
+        }
+        c += this.s;
+      }
+      else {
+        c += this.s;
+        while(i < a.t) {
+          c -= a[i];
+          r[i++] = c&this.DM;
+          c >>= this.DB;
+        }
+        c -= a.s;
+      }
+      r.s = (c<0)?-1:0;
+      if(c < -1) r[i++] = this.DV+c;
+      else if(c > 0) r[i++] = c;
+      r.t = i;
+      r.clamp();
+    }
+    // (protected) r = this * a, r != this,a (HAC 14.12)
+    // "this" should be the larger one if appropriate.
+    function bnpMultiplyTo(a,r) {
+      var x = this.abs(), y = a.abs();
+      var i = x.t;
+      r.t = i+y.t;
+      while(--i >= 0) r[i] = 0;
+      for(i = 0; i < y.t; ++i) r[i+x.t] = x.am(0,y[i],r,i,0,x.t);
+      r.s = 0;
+      r.clamp();
+      if(this.s != a.s) BigInteger.ZERO.subTo(r,r);
+    }
+    // (protected) r = this^2, r != this (HAC 14.16)
+    function bnpSquareTo(r) {
+      var x = this.abs();
+      var i = r.t = 2*x.t;
+      while(--i >= 0) r[i] = 0;
+      for(i = 0; i < x.t-1; ++i) {
+        var c = x.am(i,x[i],r,2*i,0,1);
+        if((r[i+x.t]+=x.am(i+1,2*x[i],r,2*i+1,c,x.t-i-1)) >= x.DV) {
+          r[i+x.t] -= x.DV;
+          r[i+x.t+1] = 1;
+        }
+      }
+      if(r.t > 0) r[r.t-1] += x.am(i,x[i],r,2*i,0,1);
+      r.s = 0;
+      r.clamp();
+    }
+    // (protected) divide this by m, quotient and remainder to q, r (HAC 14.20)
+    // r != q, this != m.  q or r may be null.
+    function bnpDivRemTo(m,q,r) {
+      var pm = m.abs();
+      if(pm.t <= 0) return;
+      var pt = this.abs();
+      if(pt.t < pm.t) {
+        if(q != null) q.fromInt(0);
+        if(r != null) this.copyTo(r);
+        return;
+      }
+      if(r == null) r = nbi();
+      var y = nbi(), ts = this.s, ms = m.s;
+      var nsh = this.DB-nbits(pm[pm.t-1]);	// normalize modulus
+      if(nsh > 0) { pm.lShiftTo(nsh,y); pt.lShiftTo(nsh,r); }
+      else { pm.copyTo(y); pt.copyTo(r); }
+      var ys = y.t;
+      var y0 = y[ys-1];
+      if(y0 == 0) return;
+      var yt = y0*(1<<this.F1)+((ys>1)?y[ys-2]>>this.F2:0);
+      var d1 = this.FV/yt, d2 = (1<<this.F1)/yt, e = 1<<this.F2;
+      var i = r.t, j = i-ys, t = (q==null)?nbi():q;
+      y.dlShiftTo(j,t);
+      if(r.compareTo(t) >= 0) {
+        r[r.t++] = 1;
+        r.subTo(t,r);
+      }
+      BigInteger.ONE.dlShiftTo(ys,t);
+      t.subTo(y,y);	// "negative" y so we can replace sub with am later
+      while(y.t < ys) y[y.t++] = 0;
+      while(--j >= 0) {
+        // Estimate quotient digit
+        var qd = (r[--i]==y0)?this.DM:Math.floor(r[i]*d1+(r[i-1]+e)*d2);
+        if((r[i]+=y.am(0,qd,r,j,0,ys)) < qd) {	// Try it out
+          y.dlShiftTo(j,t);
+          r.subTo(t,r);
+          while(r[i] < --qd) r.subTo(t,r);
+        }
+      }
+      if(q != null) {
+        r.drShiftTo(ys,q);
+        if(ts != ms) BigInteger.ZERO.subTo(q,q);
+      }
+      r.t = ys;
+      r.clamp();
+      if(nsh > 0) r.rShiftTo(nsh,r);	// Denormalize remainder
+      if(ts < 0) BigInteger.ZERO.subTo(r,r);
+    }
+    // (public) this mod a
+    function bnMod(a) {
+      var r = nbi();
+      this.abs().divRemTo(a,null,r);
+      if(this.s < 0 && r.compareTo(BigInteger.ZERO) > 0) a.subTo(r,r);
+      return r;
+    }
+    // Modular reduction using "classic" algorithm
+    function Classic(m) { this.m = m; }
+    function cConvert(x) {
+      if(x.s < 0 || x.compareTo(this.m) >= 0) return x.mod(this.m);
+      else return x;
+    }
+    function cRevert(x) { return x; }
+    function cReduce(x) { x.divRemTo(this.m,null,x); }
+    function cMulTo(x,y,r) { x.multiplyTo(y,r); this.reduce(r); }
+    function cSqrTo(x,r) { x.squareTo(r); this.reduce(r); }
+    Classic.prototype.convert = cConvert;
+    Classic.prototype.revert = cRevert;
+    Classic.prototype.reduce = cReduce;
+    Classic.prototype.mulTo = cMulTo;
+    Classic.prototype.sqrTo = cSqrTo;
+    // (protected) return "-1/this % 2^DB"; useful for Mont. reduction
+    // justification:
+    //         xy == 1 (mod m)
+    //         xy =  1+km
+    //   xy(2-xy) = (1+km)(1-km)
+    // x[y(2-xy)] = 1-k^2m^2
+    // x[y(2-xy)] == 1 (mod m^2)
+    // if y is 1/x mod m, then y(2-xy) is 1/x mod m^2
+    // should reduce x and y(2-xy) by m^2 at each step to keep size bounded.
+    // JS multiply "overflows" differently from C/C++, so care is needed here.
+    function bnpInvDigit() {
+      if(this.t < 1) return 0;
+      var x = this[0];
+      if((x&1) == 0) return 0;
+      var y = x&3;		// y == 1/x mod 2^2
+      y = (y*(2-(x&0xf)*y))&0xf;	// y == 1/x mod 2^4
+      y = (y*(2-(x&0xff)*y))&0xff;	// y == 1/x mod 2^8
+      y = (y*(2-(((x&0xffff)*y)&0xffff)))&0xffff;	// y == 1/x mod 2^16
+      // last step - calculate inverse mod DV directly;
+      // assumes 16 < DB <= 32 and assumes ability to handle 48-bit ints
+      y = (y*(2-x*y%this.DV))%this.DV;		// y == 1/x mod 2^dbits
+      // we really want the negative inverse, and -DV < y < DV
+      return (y>0)?this.DV-y:-y;
+    }
+    // Montgomery reduction
+    function Montgomery(m) {
+      this.m = m;
+      this.mp = m.invDigit();
+      this.mpl = this.mp&0x7fff;
+      this.mph = this.mp>>15;
+      this.um = (1<<(m.DB-15))-1;
+      this.mt2 = 2*m.t;
+    }
+    // xR mod m
+    function montConvert(x) {
+      var r = nbi();
+      x.abs().dlShiftTo(this.m.t,r);
+      r.divRemTo(this.m,null,r);
+      if(x.s < 0 && r.compareTo(BigInteger.ZERO) > 0) this.m.subTo(r,r);
+      return r;
+    }
+    // x/R mod m
+    function montRevert(x) {
+      var r = nbi();
+      x.copyTo(r);
+      this.reduce(r);
+      return r;
+    }
+    // x = x/R mod m (HAC 14.32)
+    function montReduce(x) {
+      while(x.t <= this.mt2)	// pad x so am has enough room later
+        x[x.t++] = 0;
+      for(var i = 0; i < this.m.t; ++i) {
+        // faster way of calculating u0 = x[i]*mp mod DV
+        var j = x[i]&0x7fff;
+        var u0 = (j*this.mpl+(((j*this.mph+(x[i]>>15)*this.mpl)&this.um)<<15))&x.DM;
+        // use am to combine the multiply-shift-add into one call
+        j = i+this.m.t;
+        x[j] += this.m.am(0,u0,x,i,0,this.m.t);
+        // propagate carry
+        while(x[j] >= x.DV) { x[j] -= x.DV; x[++j]++; }
+      }
+      x.clamp();
+      x.drShiftTo(this.m.t,x);
+      if(x.compareTo(this.m) >= 0) x.subTo(this.m,x);
+    }
+    // r = "x^2/R mod m"; x != r
+    function montSqrTo(x,r) { x.squareTo(r); this.reduce(r); }
+    // r = "xy/R mod m"; x,y != r
+    function montMulTo(x,y,r) { x.multiplyTo(y,r); this.reduce(r); }
+    Montgomery.prototype.convert = montConvert;
+    Montgomery.prototype.revert = montRevert;
+    Montgomery.prototype.reduce = montReduce;
+    Montgomery.prototype.mulTo = montMulTo;
+    Montgomery.prototype.sqrTo = montSqrTo;
+    // (protected) true iff this is even
+    function bnpIsEven() { return ((this.t>0)?(this[0]&1):this.s) == 0; }
+    // (protected) this^e, e < 2^32, doing sqr and mul with "r" (HAC 14.79)
+    function bnpExp(e,z) {
+      if(e > 0xffffffff || e < 1) return BigInteger.ONE;
+      var r = nbi(), r2 = nbi(), g = z.convert(this), i = nbits(e)-1;
+      g.copyTo(r);
+      while(--i >= 0) {
+        z.sqrTo(r,r2);
+        if((e&(1<<i)) > 0) z.mulTo(r2,g,r);
+        else { var t = r; r = r2; r2 = t; }
+      }
+      return z.revert(r);
+    }
+    // (public) this^e % m, 0 <= e < 2^32
+    function bnModPowInt(e,m) {
+      var z;
+      if(e < 256 || m.isEven()) z = new Classic(m); else z = new Montgomery(m);
+      return this.exp(e,z);
+    }
+    // protected
+    BigInteger.prototype.copyTo = bnpCopyTo;
+    BigInteger.prototype.fromInt = bnpFromInt;
+    BigInteger.prototype.fromString = bnpFromString;
+    BigInteger.prototype.clamp = bnpClamp;
+    BigInteger.prototype.dlShiftTo = bnpDLShiftTo;
+    BigInteger.prototype.drShiftTo = bnpDRShiftTo;
+    BigInteger.prototype.lShiftTo = bnpLShiftTo;
+    BigInteger.prototype.rShiftTo = bnpRShiftTo;
+    BigInteger.prototype.subTo = bnpSubTo;
+    BigInteger.prototype.multiplyTo = bnpMultiplyTo;
+    BigInteger.prototype.squareTo = bnpSquareTo;
+    BigInteger.prototype.divRemTo = bnpDivRemTo;
+    BigInteger.prototype.invDigit = bnpInvDigit;
+    BigInteger.prototype.isEven = bnpIsEven;
+    BigInteger.prototype.exp = bnpExp;
+    // public
+    BigInteger.prototype.toString = bnToString;
+    BigInteger.prototype.negate = bnNegate;
+    BigInteger.prototype.abs = bnAbs;
+    BigInteger.prototype.compareTo = bnCompareTo;
+    BigInteger.prototype.bitLength = bnBitLength;
+    BigInteger.prototype.mod = bnMod;
+    BigInteger.prototype.modPowInt = bnModPowInt;
+    // "constants"
+    BigInteger.ZERO = nbv(0);
+    BigInteger.ONE = nbv(1);
+    // jsbn2 stuff
+    // (protected) convert from radix string
+    function bnpFromRadix(s,b) {
+      this.fromInt(0);
+      if(b == null) b = 10;
+      var cs = this.chunkSize(b);
+      var d = Math.pow(b,cs), mi = false, j = 0, w = 0;
+      for(var i = 0; i < s.length; ++i) {
+        var x = intAt(s,i);
+        if(x < 0) {
+          if(s.charAt(i) == "-" && this.signum() == 0) mi = true;
+          continue;
+        }
+        w = b*w+x;
+        if(++j >= cs) {
+          this.dMultiply(d);
+          this.dAddOffset(w,0);
+          j = 0;
+          w = 0;
+        }
+      }
+      if(j > 0) {
+        this.dMultiply(Math.pow(b,j));
+        this.dAddOffset(w,0);
+      }
+      if(mi) BigInteger.ZERO.subTo(this,this);
+    }
+    // (protected) return x s.t. r^x < DV
+    function bnpChunkSize(r) { return Math.floor(Math.LN2*this.DB/Math.log(r)); }
+    // (public) 0 if this == 0, 1 if this > 0
+    function bnSigNum() {
+      if(this.s < 0) return -1;
+      else if(this.t <= 0 || (this.t == 1 && this[0] <= 0)) return 0;
+      else return 1;
+    }
+    // (protected) this *= n, this >= 0, 1 < n < DV
+    function bnpDMultiply(n) {
+      this[this.t] = this.am(0,n-1,this,0,0,this.t);
+      ++this.t;
+      this.clamp();
+    }
+    // (protected) this += n << w words, this >= 0
+    function bnpDAddOffset(n,w) {
+      if(n == 0) return;
+      while(this.t <= w) this[this.t++] = 0;
+      this[w] += n;
+      while(this[w] >= this.DV) {
+        this[w] -= this.DV;
+        if(++w >= this.t) this[this.t++] = 0;
+        ++this[w];
+      }
+    }
+    // (protected) convert to radix string
+    function bnpToRadix(b) {
+      if(b == null) b = 10;
+      if(this.signum() == 0 || b < 2 || b > 36) return "0";
+      var cs = this.chunkSize(b);
+      var a = Math.pow(b,cs);
+      var d = nbv(a), y = nbi(), z = nbi(), r = "";
+      this.divRemTo(d,y,z);
+      while(y.signum() > 0) {
+        r = (a+z.intValue()).toString(b).substr(1) + r;
+        y.divRemTo(d,y,z);
+      }
+      return z.intValue().toString(b) + r;
+    }
+    // (public) return value as integer
+    function bnIntValue() {
+      if(this.s < 0) {
+        if(this.t == 1) return this[0]-this.DV;
+        else if(this.t == 0) return -1;
+      }
+      else if(this.t == 1) return this[0];
+      else if(this.t == 0) return 0;
+      // assumes 16 < DB < 32
+      return ((this[1]&((1<<(32-this.DB))-1))<<this.DB)|this[0];
+    }
+    // (protected) r = this + a
+    function bnpAddTo(a,r) {
+      var i = 0, c = 0, m = Math.min(a.t,this.t);
+      while(i < m) {
+        c += this[i]+a[i];
+        r[i++] = c&this.DM;
+        c >>= this.DB;
+      }
+      if(a.t < this.t) {
+        c += a.s;
+        while(i < this.t) {
+          c += this[i];
+          r[i++] = c&this.DM;
+          c >>= this.DB;
+        }
+        c += this.s;
+      }
+      else {
+        c += this.s;
+        while(i < a.t) {
+          c += a[i];
+          r[i++] = c&this.DM;
+          c >>= this.DB;
+        }
+        c += a.s;
+      }
+      r.s = (c<0)?-1:0;
+      if(c > 0) r[i++] = c;
+      else if(c < -1) r[i++] = this.DV+c;
+      r.t = i;
+      r.clamp();
+    }
+    BigInteger.prototype.fromRadix = bnpFromRadix;
+    BigInteger.prototype.chunkSize = bnpChunkSize;
+    BigInteger.prototype.signum = bnSigNum;
+    BigInteger.prototype.dMultiply = bnpDMultiply;
+    BigInteger.prototype.dAddOffset = bnpDAddOffset;
+    BigInteger.prototype.toRadix = bnpToRadix;
+    BigInteger.prototype.intValue = bnIntValue;
+    BigInteger.prototype.addTo = bnpAddTo;
+    //======= end jsbn =======
+    // Emscripten wrapper
+    var Wrapper = {
+      abs: function(l, h) {
+        var x = new goog.math.Long(l, h);
+        var ret;
+        if (x.isNegative()) {
+          ret = x.negate();
+        } else {
+          ret = x;
+        }
+        HEAP32[tempDoublePtr>>2] = ret.low_;
+        HEAP32[tempDoublePtr+4>>2] = ret.high_;
+      },
+      ensureTemps: function() {
+        if (Wrapper.ensuredTemps) return;
+        Wrapper.ensuredTemps = true;
+        Wrapper.two32 = new BigInteger();
+        Wrapper.two32.fromString('4294967296', 10);
+        Wrapper.two64 = new BigInteger();
+        Wrapper.two64.fromString('18446744073709551616', 10);
+        Wrapper.temp1 = new BigInteger();
+        Wrapper.temp2 = new BigInteger();
+      },
+      lh2bignum: function(l, h) {
+        var a = new BigInteger();
+        a.fromString(h.toString(), 10);
+        var b = new BigInteger();
+        a.multiplyTo(Wrapper.two32, b);
+        var c = new BigInteger();
+        c.fromString(l.toString(), 10);
+        var d = new BigInteger();
+        c.addTo(b, d);
+        return d;
+      },
+      stringify: function(l, h, unsigned) {
+        var ret = new goog.math.Long(l, h).toString();
+        if (unsigned && ret[0] == '-') {
+          // unsign slowly using jsbn bignums
+          Wrapper.ensureTemps();
+          var bignum = new BigInteger();
+          bignum.fromString(ret, 10);
+          ret = new BigInteger();
+          Wrapper.two64.addTo(bignum, ret);
+          ret = ret.toString(10);
+        }
+        return ret;
+      },
+      fromString: function(str, base, min, max, unsigned) {
+        Wrapper.ensureTemps();
+        var bignum = new BigInteger();
+        bignum.fromString(str, base);
+        var bigmin = new BigInteger();
+        bigmin.fromString(min, 10);
+        var bigmax = new BigInteger();
+        bigmax.fromString(max, 10);
+        if (unsigned && bignum.compareTo(BigInteger.ZERO) < 0) {
+          var temp = new BigInteger();
+          bignum.addTo(Wrapper.two64, temp);
+          bignum = temp;
+        }
+        var error = false;
+        if (bignum.compareTo(bigmin) < 0) {
+          bignum = bigmin;
+          error = true;
+        } else if (bignum.compareTo(bigmax) > 0) {
+          bignum = bigmax;
+          error = true;
+        }
+        var ret = goog.math.Long.fromString(bignum.toString()); // min-max checks should have clamped this to a range goog.math.Long can handle well
+        HEAP32[tempDoublePtr>>2] = ret.low_;
+        HEAP32[tempDoublePtr+4>>2] = ret.high_;
+        if (error) throw 'range error';
+      }
+    };
+    return Wrapper;
+  })();
+  //======= end closure i64 code =======
   // === Auto-generated postamble setup entry stuff ===
   if (memoryInitializer) {
     function applyData(data) {
@@ -4242,7 +7008,7 @@ CArrayParam = {
   run();
   // {{POST_RUN_ADDITIONS}}
   // {{MODULE_ADDITIONS}}
-  //@ sourceMappingURL=array_param.js.map
-})(CArrayParam);
+  //@ sourceMappingURL=params_ptrs.js.map
 
+})(CParamsPtrs)
 
